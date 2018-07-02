@@ -1,0 +1,44 @@
+# Site settings
+title: leeyixuan's Blog
+SEOTitle: leeyixuan's Blog
+header-img: img/home-bg.jpg
+email: coolrabbit520@gmail.com
+description: "爱前端的小透明"
+keyword: "javascript 前端 web"
+url: "https://leeyixuan.github.io"              # your host, for absolute URL
+baseurl: "/"         # for example, '/blog' if your blog hosted on 'host/blog'
+
+
+github_username: leeyixuan
+
+highlighter: rouge
+permalink: pretty
+paginate: 10
+exclude: ["less","node_modules","Gruntfile.js","package.json","README.md"]
+anchorjs: true                          # if you want to customize anchor. check out line:181 of `post.html`
+
+gems: [jekyll-paginate]
+
+markdown: kramdown
+kramdown:
+  input: GFM                            # use Github Flavored Markdown !important
+
+disqus_username: disqus_Wh1XEQ3sD0
+
+# Analytics settings
+# Baidu Analytics
+ba_track_id: f473ff9e9e4d025dd05e339e953c3879
+# Google Analytics
+ga_track_id: 'UA-121624155-1'           # Format: UA-xxxxxx-xx
+ga_domain: Leeyixuan.github.io
+
+# Sidebar settings
+sidebar: true                           # whether or not using Sidebar.
+sidebar-about-description: "快乐而充实地生活吧~"
+sidebar-avatar: /img/avatar.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
+
+
+
+#
+
+
