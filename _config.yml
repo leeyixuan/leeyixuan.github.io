@@ -22,7 +22,7 @@ markdown: kramdown
 kramdown:
   input: GFM                            # use Github Flavored Markdown !important
 
-disqus_username: disqus_Wh1XEQ3sD0
+disqus_username: xuaner
 
 # Analytics settings
 # Baidu Analytics
