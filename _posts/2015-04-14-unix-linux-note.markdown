@@ -97,7 +97,7 @@ An **object-oriented**, multitasking OS. Low-level C but High-level OC language 
 
 > A Unix-like (sometimes referred to as UN*X or *nix) operating system is one that behaves in a manner similar to a Unix system, while not necessarily conforming to or being certified to any version of the **Single UNIX Specification**.
 
-There is no standard for defining the term.  
+There is no standard for defining the term.
 其实 Unix-like 是个相对模糊的概念：
 
 * 最狭义的 Unix 单指 Bell Labs's Unix
