@@ -164,9 +164,10 @@ push代码之前可以通过`git remote -v`查看远程仓库的信息。
 
 
 ## 最后推荐几个学习资料给大家：
-1. [图解Git](https://marklodato.github.io/visual-git-guide/index-zh-cn.html)
-2. [Git教程 - 廖雪峰的官方网站](https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000)
-3. [Git基础](https://git-scm.com/book/zh/v2/Git-%E5%9F%BA%E7%A1%80-%E8%8E%B7%E5%8F%96-Git-%E4%BB%93%E5%BA%93)
+1. [Git Reference Manual](https://git-scm.com/docs)
+2. [图解Git](https://marklodato.github.io/visual-git-guide/index-zh-cn.html)
+3. [Git教程 - 廖雪峰的官方网站](https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000)
+4. [pro Git](https://git-scm.com/book/zh/v2/Git-%E5%9F%BA%E7%A1%80-%E8%8E%B7%E5%8F%96-Git-%E4%BB%93%E5%BA%93)
 
 
 
