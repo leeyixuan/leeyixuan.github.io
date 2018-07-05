@@ -162,11 +162,6 @@ push代码之前可以通过`git remote -v`查看远程仓库的信息。
 - 遇到问题不要慌，这个时候提示的指令很有用，往往按照提示一步一步来就能解决问题；
 - 合并冲突了不可怕，解决冲突就再次提交。
 
-这是测试部分   
-黄菡    
-大家发哦是滴     
-d
-  
 
 ## 最后推荐几个学习资料给大家：
 1. [图解Git](https://marklodato.github.io/visual-git-guide/index-zh-cn.html)
