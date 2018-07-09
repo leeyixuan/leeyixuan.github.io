@@ -16,24 +16,21 @@ Flex的出现就是为了解决传统布局的`display`属性 + `position`属性
 任何一个容器都可以指定为 Flex 布局，设为 Flex 布局以后，子元素的float、clear和vertical-align属性将失效。
 
 ## flex基本介绍
-在父容器上设定属性，满足基本布局的要求：
+在父容器上设定属性，便可以满足基本布局的要求：
 1. 确定使用flex布局方案，为容器添加属性`display:flex`
 2. 确定容器的主轴方向，`flex-direction`
 3. 确定容器主轴对齐，`justify-content`
 4. 确定容器交叉轴对齐，`align-items`
 
 如果仅仅对父容器进行设置还不能满足布局要求的话，还可以为子item设置一些属性：
-	- 顺序`order`
-	- 放大`flex-grow`
-	- 缩小`flex-shrink`
-	- 项目占据的主轴空间`flex-basis`
-	- 前三项的简写属性`flex: flex-grow | flex-shrink | flex-basis`
-	- 覆盖容器的align-items的属性`align-self`
-
-
+- 顺序`order`
+- 放大`flex-grow`
+- 缩小`flex-shrink`
+- 项目占据的主轴空间`flex-basis`
+- 前三项的简写属性`flex: flex-grow | flex-shrink | flex-basis`
+- 覆盖容器的align-items的属性`align-self`
 
 ## flex 属性
-
 
 flex属性包含三个值：`flex-grow`、`flex-shrink`和`flex-basis`
 
@@ -42,7 +39,7 @@ flex属性包含三个值：`flex-grow`、`flex-shrink`和`flex-basis`
 + `flex-basis`: 伸缩基准值
 
 首先我们简单写一个flex布局的Demo:
-<iframe height='119' scrolling='no' title='flex' src='//codepen.io/Imomo/embed/mjbVdW/?height=119&theme-id=33983&default-tab=css,result&embed-version=2' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https://codepen.io/Imomo/pen/mjbVdW/'>flex</a> by Imomo (<a href='https://codepen.io/Imomo'>@Imomo</a>) on <a href='https://codepen.io'>CodePen</a>.
+<iframe height='400' scrolling='no' title='flex' src='//codepen.io/Imomo/embed/mjbVdW/?height=119&theme-id=33983&default-tab=css,result&embed-version=2' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https://codepen.io/Imomo/pen/mjbVdW/'>flex</a> by Imomo (<a href='https://codepen.io/Imomo'>@Imomo</a>) on <a href='https://codepen.io'>CodePen</a>.
 </iframe>
 
 设置父元素`display: flex`，其子元素就能使用flex布局，我们只是简单的为子元素使用了`flex: 1`就实现了三等分，而且会随着父元素的宽度变化而变化。这就是我们平时flex布局的简单用法，即各个子元素按照比例布局。
@@ -65,7 +62,7 @@ flex属性包含三个值：`flex-grow`、`flex-shrink`和`flex-basis`
 
 现在我们就来改变CSS，满足这个前提条件。
 
-<iframe height='135' scrolling='no' title='flex-grow' src='//codepen.io/Imomo/embed/jpNbRx/?height=135&theme-id=33983&default-tab=css,result&embed-version=2' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https://codepen.io/Imomo/pen/jpNbRx/'>flex-grow</a> by Imomo (<a href='https://codepen.io/Imomo'>@Imomo</a>) on <a href='https://codepen.io'>CodePen</a>.
+<iframe height='400' scrolling='no' title='flex-grow' src='//codepen.io/Imomo/embed/jpNbRx/?height=135&theme-id=33983&default-tab=css,result&embed-version=2' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https://codepen.io/Imomo/pen/jpNbRx/'>flex-grow</a> by Imomo (<a href='https://codepen.io/Imomo'>@Imomo</a>) on <a href='https://codepen.io'>CodePen</a>.
 </iframe>
 
 此时，各个元素的`flex-basis`和为`(150 + 100 + 150) = 400px`, 小于父元素的`600px`,我们就来分别计算每个子元素的宽度值。
@@ -84,37 +81,7 @@ flex属性包含三个值：`flex-grow`、`flex-shrink`和`flex-basis`
 
 现在我们就修改CSS满足这个前提。
 
-> CSS
-
-```css
-.parent {
-  display: flex;
-  width: 600px;
-}
-
-.child_1,
-.child_2,
-.child_3 {
-  /*flex: 1;*/
-  height: 200px;
-}
-
-.child_1 {
-  flex: 0 1 400px;
-  background-color: rgba(255, 0, 0, .5);
-}
-
-.child_2 {
-  flex: 0 1 200px;
-  background-color: rgba(0, 255, 0, .5);
-}
-
-.child_3 {
-  flex: 0 2 400px;
-  background-color: rgba(0, 0, 255, .5);
-}
-```
-<iframe height='106' scrolling='no' title='flex-shrink' src='//codepen.io/Imomo/embed/rrBOXb/?height=106&theme-id=33983&default-tab=css,result&embed-version=2' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https://codepen.io/Imomo/pen/rrBOXb/'>flex-shrink</a> by Imomo (<a href='https://codepen.io/Imomo'>@Imomo</a>) on <a href='https://codepen.io'>CodePen</a>.
+<iframe height='400' scrolling='no' title='flex-shrink' src='//codepen.io/Imomo/embed/rrBOXb/?height=106&theme-id=33983&default-tab=css,result&embed-version=2' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https://codepen.io/Imomo/pen/rrBOXb/'>flex-shrink</a> by Imomo (<a href='https://codepen.io/Imomo'>@Imomo</a>) on <a href='https://codepen.io'>CodePen</a>.
 </iframe>
 
 
