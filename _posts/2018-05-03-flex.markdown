@@ -4,15 +4,12 @@ title:      "深入学习flex布局"
 subtitle:   "弹性布局全解"
 date:       2018-5-03
 author:     "leeyixuan"
-header-img: "img/background/post-bg-flex.jpg"
+header-img: "img/background/post-bg-scroll.jpg"
 tags:
     - css3
 ---
 
-Flex 是 Flexible Box的缩写，意为“弹性布局”，可以简便、完整、响应式地实现各种页面布局。
-
-Flex的出现就是为了解决传统布局的`display`属性 + `position`属性 + `float`属性的复杂性。
-
+Flex 是 Flexible Box的缩写，意为“弹性布局”，可以简便、完整、响应式地实现各种页面布局。Flex的出现就是为了解决传统布局的`display`属性 + `position`属性 + `float`属性的复杂性。   
 任何一个容器都可以指定为 Flex 布局，设为 Flex 布局以后，子元素的float、clear和vertical-align属性将失效。
 
 ## flex基本介绍
