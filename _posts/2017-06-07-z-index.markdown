@@ -85,3 +85,23 @@ z-index 属性是用来设置元素的堆叠顺序。
 <iframe height='400' scrolling='no' title='z-index（3）' src='//codepen.io/Imomo/embed/rpzrKj/?height=144&theme-id=33983&default-tab=css,result&embed-version=2' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https://codepen.io/Imomo/pen/rpzrKj/'>z-index（3）</a> by Imomo (<a href='https://codepen.io/Imomo'>@Imomo</a>) on <a href='https://codepen.io'>CodePen</a>.
 </iframe>
 **总结**：可以。父元素没有设置任何定位属性，子元素设置position：relative，z-index=-1。
+
+
+## 层叠上下文
+事实上在一个层叠上下文中一共可以有7种层叠等级，列举如下：
+
+- 背景和边框 —— 形成层叠上下文的元素的背景和边框。 层叠上下文中的最低等级。
+- 负z-index值 —— 层叠上下文内有着负z-index值的子元素。
+- 块级盒 —— 文档流中非行内非定位子元素。
+- 浮动盒 —— 非定位浮动元素。
+- 行内盒 —— 文档流中行内级别非定位子元素。
+- z-index: 0 —— 定位元素。 这些元素形成了新的层叠上下文。
+- 正z-index值 —— 定位元素。 层叠上下文中的最高等级。
+
+<img class="shadow" width="450" src="https://www.github.com/CoolRabbit520/photos/raw/master/小书匠/1531289270611.png" />
+
+
+## reference
+
+1. [What You May Not Know About the Z-Index Property](https://webdesign.tutsplus.com/articles/what-you-may-not-know-about-the-z-index-property--webdesign-16892?ec_unit=translation-info-language)
+2. [浅析CSS——元素重叠及position定位的z-index顺序](http://www.cnblogs.com/mind/archive/2012/04/01/2198995.html)
