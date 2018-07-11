@@ -26,7 +26,7 @@ BFC全称是Block Formatting Context，即块格式化上下文。它是[CSS2.1�
 4.  具有overflow属性（visible除外）的block box
 5. display属性是flex或inline-flex的元素（css3中新增）
 
-**注意**：`display: table`并不会创建BFC，实际上当我们使用`display: table`的时候会创建一些匿名box（相关内容看这里）这些匿名box中有`display: table-cell`的匿名box，创建了BFC。也就是说创建BFC的不是`display: table`，而是其中的匿名box。
+**注意**：`display: table`并不会创建BFC，实际上当我们使用`display: table`的时候会创建一些匿名box，这些匿名box是`display: table-cell`，创建了BFC。也就是说创建BFC的不是`display: table`，而是其中的匿名box。
 ## BFC特性
 
 根据[CSS2.1标准](https://www.w3.org/TR/CSS21/visuren.html#block-formatting)，BFC具有以下特性：
