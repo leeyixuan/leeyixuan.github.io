@@ -2,7 +2,7 @@
 layout:     post
 title:      "浅析BFC"
 subtitle:   ""
-date:       2017-6-7
+date:       2017-4-1
 author:     "leeyixuan"
 header-img: "img/background/post-bg-BFC.jpg"
 tags:
@@ -45,7 +45,7 @@ BFC全称是Block Formatting Context，即块格式化上下文。它是[CSS2.1�
 
 ## BFC的作用
 ###  1. 阻止相邻的两个block box的margin重叠
-操作：给其中一个div外面包一个div，然后通过触发外面这个div的BFC。
+操作：给其中一个div外面包一个div，然后通过触发外面这个div的BFC。   
 原理：当两个相邻块级子元素分属于不同的BFC时可以阻止margin重叠。
 
 <iframe height='400' scrolling='no' title='BFC1' src='//codepen.io/Imomo/embed/QBwKMQ/?height=174&theme-id=33983&default-tab=css,result&embed-version=2' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https://codepen.io/Imomo/pen/QBwKMQ/'>BFC1</a> by Imomo (<a href='https://codepen.io/Imomo'>@Imomo</a>) on <a href='https://codepen.io'>CodePen</a>.
@@ -54,7 +54,7 @@ BFC全称是Block Formatting Context，即块格式化上下文。它是[CSS2.1�
 
 ### 2.清除内部浮动
 操作：给父div加上 `overflow: hidden;`。   
-原理：触发父div的BFC属性，使下面的子div都处在父div的同一个BFC区域之内。BFC就是页面上的一个隔离的独立容器。
+原理：触发父div的BFC属性，于是父div计算高度时会自动撑起高度起到清除浮动的效果。
 <iframe height='400' scrolling='no' title='ajzBaJ' src='//codepen.io/Imomo/embed/ajzBaJ/?height=82&theme-id=33983&default-tab=css,result&embed-version=2' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https://codepen.io/Imomo/pen/ajzBaJ/'>ajzBaJ</a> by Imomo (<a href='https://codepen.io/Imomo'>@Imomo</a>) on <a href='https://codepen.io'>CodePen</a>.
 </iframe>
 
