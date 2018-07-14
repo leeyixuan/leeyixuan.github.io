@@ -1,0 +1,234 @@
+---
+layout:     post
+title:      "大话CSS布局"
+subtitle:   "简述传统布局方案"
+date:       2017-9-11
+author:     "leeyixuan"
+header-img: "img/background/post-bg-layout.jpg"
+tags:
+    - css
+---
+
+
+---
+title: 大话CSS布局-简述传统布局方案
+tags: 
+grammar_cjkRuby: true
+---
+[toc]
+
+
+## 背景
+
+前端布局主要分三种：
+- 传统布局方案；
+- flex布局方案；
+- grid布局方案。
+
+传统布局方案，主要利用元素的分类及布局特性、浮动和定位实现，虽然实现的CSS代码也不够精简、优雅，但由于其基础知识来源于CSS2，所以浏览器兼容性最好，对于用户是友好的。
+
+flex布局方案，为了解决传统布局方案的种种不便，CSS3提出的一种响应式布局方案，它不再需要借助浮动和定位，而是通过父元素（flex box）配置相关的CSS属性来决定子元素的布局规则，且在大多情况下无需子元素（flex item）参与，就能完成子元素间的布局问题，且大大简化了布局的实现复杂度，CSS代码也更加精炼。美中不足的是IE10才开始支持，且需要使用-ms-前缀（IE11无需）。
+
+grid布局方案，是由微软提出，相对于传统布局方案和flex布局方案，它是一种二维布局方案，在IE10开始支持，但需要使用-ms-后缀。
+
+这里我们只探讨传统布局方案，flex布局方案具体可见我之前写过的[深入学习flex布局](https://leeyixuan.github.io/2018/05/03/flex/)这篇文章，grid布局本次不做讨论。
+
+
+## 传统布局方案基础
+一个web页面由HTML元素拼凑而成的，而每一个html元素，都被解析为一个盒子。这些盒子的布局取决于盒子的尺寸（盒子模型，box-sizing）、元素类型及其布局特性、视觉格式化模型、定位方式（正常流，浮动和绝对定位）。
+
+### 盒子模型
+
+CSS盒模型定义了一个HTML元素的，将盒子划分为四个区域：Content area、Padding area、Border area和Margin area，这里定义了盒子的大小尺寸。
+
+
+
+<img class="shadow" width="450" src="https://www.github.com/CoolRabbit520/photos/raw/master/小书匠/1531554408736.png" />
+
+**注意**：盒子模型是3D模型（如下图）。
+
+
+<img class="shadow" width="450" src="https://www.github.com/CoolRabbit520/photos/raw/master/小书匠/1531554408910.png" />
+
+### box-sizing
+
+box-sizing是CSS3新属性，作用就是告诉浏览器：CSS属性width和height是用于设置哪一种box的尺寸，在W3C标准中,box-sizing的值仅有content-box和border-box
+
+当box-sizing的值为content-box（默认值）时，有：
+```
+width = content-width;
+height = content-height;
+```
+当box-sizing的值为border-box时，有：
+```
+width = content-width + padding-left + padding-right + border-left-width + border-right-width;
+height = content-height + padding-top + padding-bottom + border-top-height + border-bottom-height;
+```
+### 元素的类型
+
+从元素的布局特性来分（元素的display属性决定），主要可以分为三类元素：块级元素（block-level element）、行内级元素（inline-level element）元素和行内块级元素（inline-block-level element)，我们可以对其下个定义：
+
+- 块级元素：display属性取block、table、flex、grid和list-item等值的独占一行显示的元素。
+
+- 行内级元素：display属性取inline值的可在同一行内排列显示的元素。
+
+- 行内块级元素：display属性取inline-block、inline-table、inline-flex和inline-grid等值的兼具块级元素和行内级元素布局特性的元素。
+
+>默认的 display 属性取决于 **HTML 规范所描述的行为**或**浏览器/用户的默认样式表**。
+
+
+**注意**：[w3c官方文档](https://www.w3.org/TR/CSS21/visuren.html#block-formatting)，把display属性值为inline、inline-block、inline-table的元素，统称为inline-level元素，本文重新定义了一个“inline-block-level元素”的概念，来对“inline-level元素”进行了细分，并将inline-blocks、inline-tables单独分类为inline-block-level元素。
+
+### 元素的布局特性
+
+#### 对于块级元素，有如下几个布局特性
+
+1. 独占一行（width默认为100%，height为0）；
+
+2. 可以设置任何尺寸相关的属性（width、padding、margin和border）。
+
+
+
+#### 行内级元素（inline-level）的布局特性
+
+>在讲行内级元素的布局特性之前，我们先了解一下行内级元素的分类，其可再细分两类元素：
+>- 可置换行内元素：内容不受CSS视觉格式化模型控制，CSS渲染模型并不考虑对此内容的渲染，且元素本身一般拥有固有尺寸（宽度，高度，宽高比）的元素，被称之为置换元素。其展示的内容是通过元素的src、value等属性或CSS content属性从外部引用得到的，img、 object、 video 和 embed，表单类的可替换元素有textarea 和input ，某些元素只在一些特殊情况下表现为可替换元素，例如 audio 、object、canvas和applet。
+>- 不可置换行内元素：除置换元素之外，所有的元素都是非置换元素。
+
+
+
+言归正传，行内级元素有如下几个布局特性：
+
+
+1. 在一行内可以与多个同类型的元素按从左到右的顺序排列；
+
+2. **不可置换行内元素**不能设置width、height和垂直方向上的margin，而**可置换行内元素**则可以；
+
+3. 在水平和垂直方向上的对齐方式，行内级元素分别受父元素的text-align属性和自身vertical-align属性的控制。
+
+
+
+
+
+
+
+#### 行内块级元素（inline-block-level）的布局特性
+
+行内块级元素兼具block-level元素和inline-level元素的布局特性，主要体现为：
+
+1. 排列方式与行内级元素同，不独占一行，在一行内按从左到右的顺序排列；
+
+2. 水平和垂直方向上的对齐方式与行内级元素同；
+
+3. 和块级元素一样，可以设置任何尺寸属性（但width默认为0）；
+
+
+
+**注意**：我们不难发现，其实可置换行内元素，其布局特性与行内块级元素相同。
+
+
+
+
+
+
+### 视觉格式化模型
+
+
+视觉格式化模型(visual formatting model)是用来处理文档并将它显示在视觉媒体上的机制，被用来描述用户代理（比如浏览器）在图形媒体下如何处理文档树。每个文档树的元素会根据框模型产生零到多个盒子（boxes）。它定义了盒子的生成，盒主要包括了块盒、行内盒、匿名盒、弹性盒子、栅格盒子（未来可能添加到规范中）。盒的类型由display属性决定。
+
+**块盒**（block box）对应块级元素(Block-level element)是那些视觉上会被格式化成块状的元素，通俗一点来说就是那些会换新行的元素。display 属性的：block, list-item, table, flex, grid 值都可以将一个元素设置成块级元素。
+
+**行内盒**（inline box）对应行内级元素(inline-level element)，是那些不会为自身内容形成新的块，而让内容分布在多行中的元素。display 属性的：inline, inline-table, inline-block, inline-flex, inline-grid 值都可以将一个元素设置成行内级元素。
+
+**匿名盒**（anonymous box）也有份匿名块盒与匿名行内盒，因为匿名盒没有名字，不能利用选择器来选择它们，所以它们的所有属性都为inherit或初始默认值；
+```
+<div>
+    Some inline text
+    <p>followed by a paragraph</p>
+    followed by more inline text.
+</div>
+```
+![](./images/1531382523376.png)
+
+同时针对不同类型的盒子，有不同的格式化上下文，比如IFC（Inline Formatting Contexts）与 BFC（Block Formatting Contexts），GFC（GridLayout Formatting Contexts）以及 FFC（Flex Formatting Context）。他们用于决定盒子模型的布局、其子元素将如何定位以及和其他元素的关系和相互作用。
+
+>具体BFC和IFC可见我之前写过的文章：   
+[《浅析IFC》](https://leeyixuan.github.io/2017/04/05/IFC/)   
+[《浅析BFC》](https://leeyixuan.github.io/2017/04/01/BFC/)
+
+
+### 定位方式
+
+改变元素在网页中的位置主要有三种方法：
+1. 正常文档流（按照div在HTML中的顺序从上到小，从左到右）
+2. 浮动（左浮动和右浮动）
+3. 绝对定位（相对于父级的盒子进行定位）
+
+**注意**：之所以相对定位和flxed没有出现在这里是因为：相对定位并没有脱离正常流，而fixed是一种特殊的绝对定位(相对于viewport定位)。
+
+
+这三种定位方式的主要差异体现在一下几个方面：
+
+
+#### 1.在网页中的位置
+
+#### 1.1 正常流
+html文档中的元素默认处于**普通流**（normal flow）中，也就是说其顺序由元素在文档中的**先后位置**决定，此时一般不会产生重叠（但指定负边距可能产生重叠）。position属性默认为:static，就是普通流。
+ 脱离文档流：元素脱离了默认存放的容器，换到另外一个容器存放。一个元素脱离了文档流，这样会导致：其父元素无法识别其，其也不参与父元素高度的计算。若有一个父元素的所有子元素都脱离文档流，则会出现“高度塌陷”问题。常见的脱离文档流的方法有：
+- 将元素设置为浮动元素
+- 将元素设置为absolute、fixed元素
+
+
+#### 1.2 浮动
+假如某个div元素A是浮动的，如果A元素上一个元素也是浮动的，那么A元素会跟随在上一个元素的后边(如果一行放不下这两个元素，那么A元素会被挤到下一行)；如果A元素上一个元素是标准流中的元素，那么A的相对垂直位置不会改变，也就是说A的顶部总是和上一个元素的底部对齐。**div的顺序是HTML代码中div的顺序决定的。**
+把div2、div4左浮动，效果图如下：
+
+<img class="shadow" width="450" src="https://www.github.com/CoolRabbit520/photos/raw/master/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1514255619296.jpg" />
+#### 1.3 绝对定位
+- 相对于**最近的已定位祖先元素**，如果元素没有已定位的祖先元素，那么它的位置相对于最初的包含块。
+
+	> 最近的已定位祖先元素：最近的 **position 为 absolute / relative / fixed** 的祖先元素。（就是position不为static的父级盒子）
+- 未指定left/top/right/bottom的absolute元素，其在所处层级中的定位点就是正常文档流中该元素的定位点。
+- 用户给absolute元素指定了left/right，top/bottom
+	- left是指左外边距边界（margin-left）与其包含块左边界（border-left）之间的偏移（left：0元素的左上角和父元素的左上角重合）
+	-right是指右外边距边界（margin-right）与其包含块右边界（border-right）之间的偏移（right：0元素的右上角和父元素的右上角重合）
+- absolute的left: 0;right: 0;top: 0;bottom: 0;来实现全屏拉伸。
+
+
+#### 2. 对其他元素位置的影响
+
+#### 2.1  正常流
+不会影响其他元素在网页中的位置。
+
+#### 2.2  浮动
+脱离标准文档流，其他的元素就像网页中不存在该绝对定位元素一样，无视他自己进行定位。
+关于覆盖网页中其他元素的问题：不会影响之前的盒子，但影响之后紧邻的后面的盒子。
+
+#### 2.3  绝对定位
+脱离标准文档流，其他的元素就像网页中不存在该绝对定位元素一样，无视他自己进行定位。
+不会影响其他元素在网页中的位置，但是会覆盖网页中的元素（之前之后的元素都有可能会被覆盖，关键看top/bottom/left/righht设置的值）。
+
+### 3. 新生成的框的类型
+#### 3.1 正常流
+没有脱离标准文档流，按照元素原来的框的类型正常显示。
+
+#### 3.2  浮动
+- 浮动元素会生成一个**块级框**，而不论它本身是何种元素。这和绝对定位一样。
+- 如果浮动非替换元素，则要指定一个明确的宽度；否则，它们会尽可能地窄。
+- 总应用于图像，使文本围绕在图像周围。不过在 CSS 中，任何元素都可以浮动。
+-  `float`产生的块级框效果非常近似于display:inline-block。但相比之下，浮动能设定为左浮和右浮，但display:inline-block都是从左到右排列的。
+
+#### 3.3 绝对定位
+元素定位后生成一个**块级框**，而不论原来它在正常流中生成何种类型的框。
+- 没有设置宽度值时，元素的宽度会根据内容进行调节，框会尽可能地窄。
+- 关于是否换行的问题，绝对定位时依据top/bottom/right/left进行定位的，他们甚至可以重叠，所以换行的问题并不关键。
+
+#### 4. 层级
+
+>具体z-index可见我之前写过的文章：   [《z-index 知多少》](https://leeyixuan.github.io/2017/06/07/z-index/)
+
+   
+## Reference
+1. [学习 BFC (Block Formatting Context)](https://juejin.im/post/59b73d5bf265da064618731d)
+2. [视觉格式化模型中的各种框](https://blog.doyoe.com/2015/03/09/css/%E8%A7%86%E8%A7%89%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%A8%A1%E5%9E%8B%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8D%E6%A1%86/)
+3. [前端布局基础概述](https://mp.weixin.qq.com/s/-LcNZWFFty2lWuND6uuNNA?scene=25#wechat_redirect)
