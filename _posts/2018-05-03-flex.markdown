@@ -27,7 +27,12 @@ Flex 是 Flexible Box的缩写，意为“弹性布局”，可以简便、完�
 - 前三项的简写属性`flex: flex-grow | flex-shrink | flex-basis`
 - 覆盖容器的align-items的属性`align-self`
 
-## flex 属性
+
+
+## flex属性介绍
+理解flex布局的关键就是学习各个属性的含义，接下来我介绍4个比较难以理解的属性：
+
+### flex 属性
 
 flex属性包含三个值：`flex-grow`、`flex-shrink`和`flex-basis`
 
@@ -43,7 +48,7 @@ flex属性包含三个值：`flex-grow`、`flex-shrink`和`flex-basis`
 
 `flex: 1`其实是`flex: 1 1 0%`的简写属性，即伸缩比例都是1。下面我们就分别理解下三个属性值对于布局的影响。
 
-## flex-basis 属性
+### flex-basis 属性
 
 `flex-basis`属性定义了项目占据的主轴空间（main size）。它的默认值为auto，即项目的本来大小。它可以设为跟width或height属性一样的值（比如350px），则项目将占据固定空间。
 
@@ -53,7 +58,7 @@ flex属性包含三个值：`flex-grow`、`flex-shrink`和`flex-basis`
 
 上面的两种情况就分别对应了`flex-grow`和`flex-shrink`属性生效的情况，也就是说当子元素的`flex-basis`属性宽度和小于父元素的宽度值时`flex-grow`生效，反之`flex-shrink`生效。
 
-## flex-grow 属性
+### flex-grow 属性
 
 `flex-grow`属性是扩展比例，上面我们也谈到了当子元素的`flex-basis`总和小于父元素的宽度值时`flex-grow`生效。
 
@@ -72,7 +77,7 @@ flex属性包含三个值：`flex-grow`、`flex-shrink`和`flex-basis`
 
 所以`child_1`宽度为`(150 + 1 * 100) = 250px`, `child_2`宽度为`(100 + 0 * 100) = 100px`, `child_3` 同 `child_1`。
 
-## flex-shrink 属性
+### flex-shrink 属性
 
 `flex-shrink` 属性是收缩比例，当子元素的`flex-basis`总和大于父元素的宽度值时`flex-grow`生效。
 
