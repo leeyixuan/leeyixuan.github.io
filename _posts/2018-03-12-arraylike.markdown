@@ -125,4 +125,5 @@ func(1, 2, 3);
 
 ## Reference
 1.  [NodeList- MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/NodeList)
-2.  [Array.prototype.slice()-MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/slice)  
+2.  [Array.prototype.slice()-MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/slice)
+3. [Document Object Model HTML-W3C](https://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-75708506)
