@@ -31,6 +31,7 @@ setInterval与setTimeout所在线程，负责计时并触发定时（计时完�
 5. 异步http请求线程     
 XMLHttpRequest在连接后是通过浏览器新开一个线程请求，检测到状态变更时，如果设置有回调函数，异步线程就产生状态变更事件，将这个回调再放入事件队列中。
 
+ <img class="shadow" width="450" src="https://www.github.com/CoolRabbit520/photos/raw/master/小书匠/1531703327669.png" />
 
 **注意**：
 - 由于JS的单线程关系，所以这些待处理队列中的事件都得排队等待JS引擎处理（当JS引擎空闲时才会去执行）。
