@@ -1,0 +1,83 @@
+---
+layout:     post
+title:      "浏览器加载页面过程"
+subtitle:   ""
+date:       2017-7-11
+author:     "leeyixuan"
+header-img: "img/background/post-bg-render.jpg"
+tags:
+    - js
+---
+
+
+
+
+
+
+
+## 浏览器渲染页面主流程
+
+ <img class="shadow" width="450" src="https://www.github.com/CoolRabbit520/photos/raw/master/小书匠/1531706788129.png" />
+
+1.解析 HTML 标记并构建 DOM 树。
+2.解析 CSS 标记并构建 CSSOM 树。
+3.将 DOM 与 CSSOM 合并成一个Render渲染树。
+4.根据渲染树来布局，以计算每个节点在屏幕中的位置。
+5.将各个节点绘制到屏幕上。
+
+
+## DOM渲染流程
+这里详细描述一下“解析HTML 标记并构建 DOM 树”的流程：
+
+1. 浏览器下载HTML文件并开始解析DOM。
+2. 遇到样式表文件link[rel=stylesheet]时，将其加入资源文件下载队列，继续解析DOM。
+3. 遇到脚本文件时，暂停DOM解析并立即下载脚本文件。
+4. 下载结束后立即执行脚本，在脚本中可访问当前`<script>`以上的DOM。
+5. 脚本执行结束，继续解析DOM。
+6.  整个DOM解析完成，触发**DOMContentLoaded事件**。
+7.  加载图片等外部文件。
+8.  当资源及其依赖资源已完成加载时，将触发**load事件**。
+
+**注意**：
+- 资源文件下载队列。CSS样式表、子框架、图片等资源文件的下载不会暂停DOM解析。浏览器会并行地下载这些文件，但通常会限制并发下载数，一般为3-5个。可以在开发者工具的Network标签页中看到。
+- 执行脚本文件前，浏览器可能会等待该`<script>`之前的样式下载完成并渲染结束。
+- 浏览器的渲染线程和JS执行线程是互斥的，并且JavaScript默认是阻塞加载的。页面的下载和渲染都必须停下来等待脚本执行完成。
+- JS文件可以并行下载，渲染还是被阻塞的, 页面仍然必须等待所有 JavaScript 代码下载并执行完成才能继续。
+- 对于图片和CSS, 在加载时会并发加载(如一个域名下同时加载两个文件)。但在加载 JavaScript 时,会禁用并发,并且阻止其他内容的下载。
+
+
+## 总结
+
+
+
+
+1. 下载HTML文件
+2. HTML文件下载完成，进入浏览器的渲染线程，正式开始绘制页面。(css的下载是异步并行的)
+3. DOM解析
+	- 在这个过程中，遇到CSS文件和图片等资源，会把他们加入到下载队列，并行下载
+	- 在这个过程中，遇到JS文件，**暂停渲染线程，开启JS脚本执行线程**，开始下载JS文件，文件下载完毕之后立即执行。
+4. CSSOM解析
+5. 构建渲染树
+6. 布局计算渲染树
+7. 绘制页面
+
+**注意**：
+- 页面加载由页面渲染和JS脚本执行两部分构成。
+- 一般的JS脚本下载和执行会阻塞页面渲染的线程。（async和defer可以实现JS脚本下载不阻塞页面渲染，但是JS脚本的执行会阻塞页面渲染过程。）
+- 在页面渲染过程中，下载任务一直在并行运行。
+- css加载不会阻塞DOM树解析（异步加载时DOM照常构建），但会阻塞render树渲染（渲染时需等css加载完毕，因为render树需要css信息）。
+- 需要着重指出的是，浏览器渲染页面是一个渐进的过程。所以，不必等到整个 HTML 文档解析完毕之后，就会开始构建渲染树和布局。在不断接收和处理来自网络的其余内容的同时，浏览器会将部分内容解析并显示出来。
+
+## Reference
+
+  
+  
+  1. [异步脚本载入提高页面性能](http://harttle.com/2016/05/18/async-javascript-loading.html
+  )
+  2. [浏览器渲染原理及流程 ](http://web.jobbole.com/91386/)
+  3. [渲染树构建、布局及绘制 -Google Developers](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-tree-construction)
+  4. [基于Webkit的浏览器关键渲染路径介绍](http://www.cnblogs.com/wmhuang/p/7435639.html
+  )
+  5. [浅析前端页面渲染机制](http://web.jobbole.com/90961/)
+  6. [浏览器的工作原理：现代网络浏览器幕后揭秘 ](https://www.html5rocks.com/zh/tutorials/internals/howbrowserswork/)
+

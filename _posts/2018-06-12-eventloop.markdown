@@ -1,7 +1,7 @@
 ---
 layout:     post
-title:      "深入理解JS事件循环机制"
-subtitle:   "浏览器和node.js中的事件循环机制的分析比较"
+title:      "深入理解JS事件循环"
+subtitle:   "浏览器和node.js中的事件循环的分析比较"
 date:       2018-3-12
 author:     "leeyixuan"
 header-img: "img/background/post-bg-eventloop.jpg"
@@ -11,11 +11,14 @@ tags:
 
 
 
-## 浏览器中的事件循环机制
+## 浏览器中的事件循环
 ### 浏览器的渲染进程
 每打开一个浏览器tab页，就会开启一个**浏览器的渲染进程**，负责页面渲染，脚本执行，事件处理等。
 
 该浏览器的渲染进程包括以下线程：
+
+ <img class="shadow" width="450" src="https://www.github.com/CoolRabbit520/photos/raw/master/小书匠/1531703327669.png" />
+
 1. GUI渲染线程   
 负责渲染浏览器界面，解析HTML，CSS，构建DOM树和RenderObject树，布局和绘制等；负责渲染浏览器界面，解析HTML，CSS，构建DOM树和RenderObject树，布局和绘制等。
 
@@ -31,7 +34,6 @@ setInterval与setTimeout所在线程，负责计时并触发定时（计时完�
 5. 异步http请求线程     
 XMLHttpRequest在连接后是通过浏览器新开一个线程请求，检测到状态变更时，如果设置有回调函数，异步线程就产生状态变更事件，将这个回调再放入事件队列中。
 
- <img class="shadow" width="450" src="https://www.github.com/CoolRabbit520/photos/raw/master/小书匠/1531703327669.png" />
 
 **注意**：
 - 由于JS的单线程关系，所以这些待处理队列中的事件都得排队等待JS引擎处理（当JS引擎空闲时才会去执行）。
@@ -66,7 +68,7 @@ ES6推出的promise等概念，更加细化了事件循环。
 >渲染更新：执行完microtask队列里的任务，有可能会渲染更新。在一帧以内的多次dom变动浏览器不会立即响应，而是会积攒变动以最高60HZ的频率更新视图。
 
 
-## node.js中的事件循环机制
+## node.js中的事件循环
 ### 6个阶段
 node.js中的事件循环由 libuv库实现，每次事件循环都包含了6个阶段。
 <img class="shadow" width="450" src="https://www.github.com/CoolRabbit520/photos/raw/master/小书匠/1531662515628.png" />
