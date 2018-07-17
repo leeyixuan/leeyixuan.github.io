@@ -1,0 +1,112 @@
+---
+layout:     post
+title:      "浏览器缓存的一切"
+subtitle:   "浏览器缓存和静态资源更新"
+date:       2018-7-3
+author:     "leeyixuan"
+header-img: "img/background/post-bg-git.jpg"
+tags:
+    - 工程化
+---
+
+
+
+浏览器缓存其实就是HTTP缓存。
+
+服务器通过在HTTP响应的头部设置4个字段（Expires，Cache-Control，Last-Modified，Etag）来告诉浏览器针对该响应中携带的静态资源应该如何缓存。
+
+浏览器下次请求同样的静态资源时，会去检查HTTP相关字段，执行相应的缓存操作。
+
+**注意**：
+- 若HTTP响应的头部没有设置4个字段就意味着没有开启浏览器缓存
+- HTTPS安全加密的请求一般情况下也没有开启浏览器缓存
+- 使用post请求无法进行缓存
+
+
+
+## 强缓存和协商缓存
+浏览器缓存分为强缓存和协商缓存（对比缓存）。
+
+强缓存由Expires和Cache-Control这两个字段控制，协商缓存由Last-Modified，Etag这两个字段控制。
+
+强缓存的优先级高于协商缓存，意思就是浏览器会先检查Expires和Cache-Control这两个字段，查看缓存是否过期，如果过期则继续进行协商缓存，检查Last-Modified，Etag。当协商缓存也没命中时，服务器就会将资源发送回客户端。
+
+强缓存和协商缓存共同之处在于，如果命中缓存，服务器都不会返回资源；区别是，强缓存不对发送请求到服务器，但协商缓存会。
+
+
+
+
+
+## Expires，Cache-Control，Last-Modified，Etag
+
+
+
+1. Expires和Cache-Control是控制强缓存的字段。
+2. Cache-Control是HTTP1.1中规定的，Expires是HTTP1.0中规定的。Cache-Control优先级更高，这两个Header可以只用其一，也可以一起使用。一起使用时以Cache-Control为准。
+3. Cache-Control的max-age描述的是一个相对时间，在进行缓存命中的时候，都是利用客户端时间进行判断。而Expires是服务器返回的一个绝对时间，具有时间差等问题。所以相比较Expires，Cache-Control的缓存管理更有效，安全一些。
+4. Cache-Control的no-cache不是不进行缓存，只是强制浏览器进行对比缓存来验证，no-store才是静止浏览器进行任何缓存。但是实际上静止浏览器缓存不只是设置no-store就行，要考虑浏览器默认强缓存的情况，最好再将过期时间设为过去。
+5. Cache-Control没有设置private和public时，默认为public。（public允许共享缓存；private只允许本地浏览器进行缓存）
+5. Last-Modified和Etag是协商缓存时，服务器http响应头的字段，标识当前资源的版本。协商校验时，浏览器将资源的版本号填充到If-Modified-Since和If-Modified-Since字段中发送给服务器校验。
+6. Etag是HTTP1.1中规定的， Last-Modified是HTTP1.0中规定的。Etag优先级更高，这两个Header可以只用其一，也可以一起使用。一起使用时先进行 Etag的校验，通过之后再进行Last-Modified的校验。
+7. Last-Modified是基于文件修改的时间（秒）。Etag是基于文件的内容生成的哈希指纹，能够准确地标识当前文件的唯一性，弥补Last-Modified无法识别快速多次修改文件和文件内容没有改动却变更标识的问题。但是Etag也具有哈希冲突的问题。这两者结合使用效果更佳。
+
+
+## 设置浏览器缓存的方式——meta
+浏览器缓存实质上是通过HTTP协议中的头部字段控制的，这是服务端的工作。那么，对于一个前端开发者，如何能够控制资源的缓存？
+就是在HTML文件头部使用meta标签，定义具体的缓存方式。
+```
+<meta http-equiv="Cache-Control" content="no-cache" /> <!-- HTTP1.1 在1.1中优先于expires-->
+<meta http-equiv="pragma" content="no-cache" /> <!-- HTTP1.0 -->
+<meta http-equiv="Expires" content="0" /> <!-- 示意到期时间 HTTP1.0 & 1.1 -->
+```
+
+**注意**：
+1. 其实meta的优先级比HTTP头部字段的优先级低，只有当HTTP头部没有设置缓存字段时，浏览器才会根据meta中的设置进行缓存。
+2. meta中的缓存设置只作用于当前HTML文件，对于该HTML文件中引用到的静态资源起不到作用。
+>以上两点发现，是通过在本地项目中为nginx进行缓存配置模拟HTTP头部字段，在html文件头部添加meta字段实验发现的。绝对靠谱~     
+>另外，注意nginx要对不同静态资源分别进行配置。
+
+```
+location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$ {
+    etag off;   #关闭etag
+    expires 1d; #有效期一天 
+}
+
+location ~ .*\.css$ {
+    expires 1y; #有效期一年
+    add_header Cache-Control public; #cache-control设为public
+}
+
+location ~ .*\.js$ {
+    expires 1y; #有效期一年
+    add_header Cache-Control private; #cache-control设为private
+}
+```
+
+综上，前端开发者在缓存部分做的工作有限，还是尽量和服务端的同学商量好具体的缓存策略，通过服务器为HTTP添加头部字段来实现静态资源的缓存。
+
+
+
+## 浏览器缓存和静态资源更新
+
+
+尽管没有缓存设置，但是Chrome浏览器是会默认会缓存图片，css和js等静态资源，所以经常会因为强缓存导致资源没有及时更新而看不到最新的效果。解决这个问题的办法也很简单，就是：ctrl+f5，清除缓存重新发起请求。但是这总归不是个好办法。
+
+强缓存作为前端性能优化的一大利器，不可能放弃。通常，静态资源全部配置一个超时时间超长的Expires或Cache-Control。但是在版本更新时，就会由于强缓存，在默认条件下无法获取最新资源。针对这个问题，已经有成熟的解决方案：
+>静态文件资源内容生成一个内容散列值，打包出来的文件名会增加上这个散列值，非覆盖式上传该静态资源。
+
+具体内容详见： [变态的静态资源缓存与更新 ](https://my.oschina.net/jathon/blog/404968)
+
+总的来说
+1. 静态服务器配置静态资源的过期时间为永不过期——节省带宽，提高性能（强缓存或者对比缓存304）
+2. 采用内容摘要作为缓存更新依据——精确缓存控制（加MD5戳，gulp/webpack等构建工具完成）
+3. 静态资源CDN部署 ——优化缓存请求（网络负载均衡）
+4. 更资源发布路径实现非覆盖式发布 —— 平滑升级（不删去旧的静态资源，保障旧版本用户服务质量）
+
+
+
+## Reference
+1. [浏览器缓存知识小结及应用 ](http://www.cnblogs.com/lyzg/p/5125934.html)
+2. [WEB缓存探究 ](https://segmentfault.com/a/1190000010367680)
+3. [浅谈Web缓存](http://www.alloyteam.com/2016/03/discussion-on-web-caching/)
+4. [变态的静态资源缓存与更新 ](https://my.oschina.net/jathon/blog/404968)
