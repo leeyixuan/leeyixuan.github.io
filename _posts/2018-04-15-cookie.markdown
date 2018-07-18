@@ -1,0 +1,107 @@
+---
+layout:     post
+title:      "cookie"
+subtitle:   "磨人的小甜饼"
+date:       2017-4-15
+author:     "leeyixuan"
+header-img: "img/background/post-bg-cookie.jpg"
+tags:
+    - 工程化
+---
+
+
+
+
+
+经常有人说cookie是一种web存储技术，其实不然。cookie的存储空间只有4K，一般用来存储用户信息，标识用户身份和状态。cookie正确的打开方式是：通过携带的用户信息绕过HTTP无状态性的问题。
+
+cookie是服务端通过HTTP头部的`set-cookie`字段下发的，浏览器接收到之后，会将cookie保存到本地。
+>如果cookie的expires/max-age字段设置为过去时，或者是没有设置expires/max-age字段，那么该cookie就不会存储到内存中，该cookie在会话结束之后自动销毁。
+
+之后浏览器向服务器发送请求时，HTTP请求的头部会自动携带上cookie字段。
+>domain和path2个字段共同决定了cookie何时被浏览器自动添加到请求头部中发送出去。   
+>由于cookie遵循同源策略，发生跨域请求时，即使请求URL的域名和路径都满足 cookie 的 domain 和 path，默认情况下cookie也不会自动被添加到请求头部中。
+
+## cookie的字段
+### domain
+domain表示的是cookie所在的域，默认为URL的域名。
+创建cookie时，需要设置domain，有多级域名时，可以控制cookie的作用域。
+- domain设为父域名时，父域名和其下所有子域名可以共享该cookie；
+- domain设为本URL的域名时，父域名、本域名和本域名下的子域名可以共享该cookie；
+- domain设为和本URL的域名同级的兄弟域名时，只有兄弟域名和其下所有子域名可以共享该cookie；
+- domain不可以设为本URL的域名的子域名，不会报错，但是设置无效；
+- domain不可以设为跨域的域名，不会报错，但是设置无效；
+
+### path
+path表示cookie所在的路径，默认为URL的的路径，就是根目录。
+创建cookie时，同时也需要设置path，有多级目录时，可以控制cookie的作用域。
+
+>多个跨域的路径需要使用同一个cookie时，可以通过合理地设置domain和path减少跨域，实现cookie共享。
+
+### expires/max-age
+这两个都是描述cookie失效时间的字段。
+不同的是，max-age是HTTP1.1中规定的，expires是HTTP1.0中规定的。max-age描述的是一个相对时间，而Expires是服务器返回的一个绝对时间。
+
+
+cookie分为session cookie和永久cookie就是取决于expires/max-age字段。
+- session cookie：expires/max-age字段设置为过去时，或者是没有设置expires/max-age字段，那么该cookie就不会存储到内存中，该cookie在会话结束之后自动销毁。
+- 永久cookie：就是expires/max-age字段设置为将来时，浏览器会将该字段存储在浏览器所在文件下，到期销毁。
+
+### httponly
+
+当cookie带httpOnly选项时，客户端则无法通过脚本去访问（包括读取、修改、删除等），只会在HTTP通信时传递。
+> httponly字段可以保证网页不受XSS攻击。具体内容可见我之前写的文章：
+> [《XSS和CSRF》]()
+
+### secure
+secure选项用来设置cookie只在确保安全的请求中才会发送。当请求是HTTPS或者其他安全协议时，包含 secure 选项的 cookie 才能被发送至服务器。
+
+## document.cookie
+浏览器可以通过`document.cookie`读取和设置cookie。   
+`document.cookie="age=12; expires=Thu, 26 Feb 2116 11:50:25 GMT; domain=sankuai.com; path=/";`
+
+
+### 创建cookie
+
+
+1. domain参数可以设置父域名以及自身，但不能设置其它域名，包括子域名，否则cookie不起作用。
+2. name和value必须经过escape/unescape，encodeURIComponent/decodeURIComponent或者encodeURI/decodeURI序列化处理。
+3. 只有在https协议的网页中，客户端设置secure类型的cookie才能成功，但无法设置HttpOnly选项。
+4. 如果显式设置了domain，则设置成什么，浏览器就存成什么；但如果没有显式设置，则浏览器会自动取url的host作为domain值。path同上。
+
+
+
+
+
+### 修改cookie
+
+要想修改一个cookie，只需要重新赋值就行，旧的值会被新的值覆盖。但要注意一点，在设置新cookie时，path/domain这几个选项一定要旧cookie 保持一样。否则不会修改旧值，而是添加了一个新的 cookie。
+
+### 删除cookie
+
+删除一个cookie 也挺简单，也是重新赋值，只要将这个新cookie的expires 选项设置为一个过去的时间点就行了。但同样要注意，path/domain/这几个选项一定要旧cookie 保持一样。
+
+## cookie同源策略
+
+> 跨域是无法读取cookie的。
+
+比如说，同窗口的跨域tab页是无法读取本页面的cookie的，XSS攻击劫持cookie也是将脚本注入到本页面，通过document.cookie获取本页面的cookie。
+
+> 原网页代码中的document.cookie无法读取跨域服务器域名下的cookie。
+
+在本页面使用Chrome devtool查看cookie还能看到许多跨域的cookie存在，但是其实是无法通过document.cookie访问到的。
+
+>默认情况下，在发生跨域时，cookie作为一种credential信息是不会被传送到服务端的。
+
+CORS请求默认不发送cookie和HTTP认证信息。如果要把cookie发到服务器，一方面要服务器同意，指定Access-Control-Allow-Credentials字段。另一方面，开发者必须在AJAX请求中打开withCredentials属性。
+```
+var xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+```
+
+
+## Reference
+1. [聊一聊 cookie](https://segmentfault.com/a/1190000004556040)
+2. [解决cookie跨域访问 ](http://www.cnblogs.com/hujunzheng/p/5744755.html)
+3. [跨域资源共享 CORS 详解](http://www.ruanyifeng.com/blog/2016/04/cors.html)
+4. [单点登录与权限管理本质：session和cookie介绍 ](https://juejin.im/post/5a958d8ff265da4e7b44d797)

@@ -15,7 +15,7 @@ tags:
 ## 1. HTML
 减少不必要的DOM节点，加速DOM树构建和提升JS遍历DOM的速度。 
 
-头部head引入CSS，提前加载并构建CSSOM树，提升首屏速度。（不适用`@import`引入CSS，这其实就相当于在尾部引入CSS）
+头部head引入CSS，提前加载并构建CSSOM树，提升首屏速度。（不适用`@import`引入CSS，@import需要页面完全载入以后再加载，无法提前并行加载，这其实就相当于在尾部引入CSS）
 
 尾部引入JS（`<\body>`之前），避免JS解析阻塞页面渲染。
 
@@ -27,6 +27,7 @@ tags:
 设置HTTP header信息（expires\cache control\Etags）, 缓存静态资源。注意只是缓存外部资源文件，内嵌在html中的CSS和JS不会缓存。
 >相关细节可见我之前写过的文章：   
 [《浏览器缓存》](https://leeyixuan.github.io/2017/04/05/IFC/)
+
 ## 5. 避免不必要的回流reflow
 >相关细节可见我之前写过的文章：   
 [《重绘和回流》](https://leeyixuan.github.io/2017/11/28/reflow/)
