@@ -2,7 +2,7 @@
 layout:     post
 title:      "cookie"
 subtitle:   "磨人的小甜饼"
-date:       2017-4-15
+date:       2018-4-15
 author:     "leeyixuan"
 header-img: "img/background/post-bg-cookie.jpg"
 tags:
@@ -26,6 +26,7 @@ cookie是服务端通过HTTP头部的`set-cookie`字段下发的，浏览器接�
 ### domain
 domain表示的是cookie所在的域，默认为URL的域名。
 创建cookie时，需要设置domain，有多级域名时，可以控制cookie的作用域。
+子域cookie机制：
 - domain设为父域名时，父域名和其下所有子域名可以共享该cookie；
 - domain设为本URL的域名时，父域名、本域名和本域名下的子域名可以共享该cookie；
 - domain设为和本URL的域名同级的兄弟域名时，只有兄弟域名和其下所有子域名可以共享该cookie；
@@ -47,7 +48,7 @@ cookie分为session cookie和永久cookie就是取决于expires/max-age字段。
 - session cookie：expires/max-age字段设置为过去时，或者是没有设置expires/max-age字段，那么该cookie就不会存储到内存中，该cookie在会话结束之后自动销毁。
 - 永久cookie：就是expires/max-age字段设置为将来时，浏览器会将该字段存储在浏览器所在文件下，到期销毁。
 
-### httponly
+### httpOnly
 
 当cookie带httpOnly选项时，客户端则无法通过脚本去访问（包括读取、修改、删除等），只会在HTTP通信时传递。
 > httponly字段可以保证网页不受XSS攻击。具体内容可见我之前写的文章：

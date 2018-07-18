@@ -1,0 +1,111 @@
+---
+layout:     post
+title:      "XSS和CSRF攻防"
+subtitle:   ""
+date:       2018-4-27
+author:     "leeyixuan"
+header-img: "img/background/post-bg-XSS.jpg"
+tags:
+    - 工程化
+---
+
+之前在做项目的时候，有一个业务场景是用户创建群，之后填写并显示群信息。    
+准备提测的时候，经验丰富的老大过来扫了一眼代码，问我：做了防XSS攻击处理吗？我：这是啥？没有。。    
+于是，老大拿起手机一顿操作，给群名称输入`<botton>haha</botton>`，随后群名称竟然显示了一个按钮！老大说：你看，你被我攻击了。不过，看来server那边也没做处理。    
+后续的处理其实也还蛮简单的，就是给用户输入的特殊字符进行转义。见代码：
+```
+function escapeXSS (str) {
+    return str.replace(/[<>"&']/g, function(match, pos, originalText){
+        switch(match){
+            case "<": return "&lt;";
+            case ">":return "&gt;";
+            case "&":return "&amp;";
+            case "\"":return "&quot;";
+            case "\'":return "&#39;";
+        }
+    });
+},
+```
+接下来我就来讲一讲前端最经常遇到的两大安全问题：XSS和CSRF。
+## XSS
+
+ XSS（Cross Site cript），即跨站脚本攻击。
+ XSS是指攻击者在网站上注入恶意的脚本（ JavaScript，HTML 和 Flash），通过恶意脚本对客户端网页进行篡改。从而在用户浏览网页时，将一些隐私数据像 cookie、session 发送给攻击者，将受害者重定向到一个由攻击者控制的网站，在受害者的机器上进行一些恶意操作。
+ 
+ XSS攻击可以分为3类：反射型（非持久型）、存储型（持久型）、DOM XSS。
+ 
+ - 反射型XSS：
+ 本地发出请求时XSS代码出现在URL中，作为输入提交到服务器端，但是服务器端并没有做处理，而是直接将这段代码作为响应内容发送给浏览器，浏览器执行这段代码受到攻击。
+ 
+ - 存储型XSS：
+本地上传恶意XSS代码到服务器，服务端存储该XSS代码，并且最终会在某个页面上输出该XSS代码。
+
+- DOM XSS：
+DOM XSS的XSS代码并不需要服务器解析响应的直接参与，触发XSS靠的就是浏览器端的DOM解析，可以认为完全是客户端的事情。
+
+## 防范XSS攻击
+
+### 1. HttpOnly防止劫取cookie
+>cookie劫持其实就是通过`document.cookie`获取cookie。
+
+当cookie带httpOnly选项时，客户端则无法通过脚本去访问（包括读取、修改、删除等），只会在HTTP通信时传递。
+
+### 2. 输入检查
+对用户输入的字段进行转义或者禁止输入无效的字符。
+### 3. 输出检查
+对服务器响应的字段进行转义或者编码。
+
+## CSRF
+CSRF(Cross-site request forgery)，跨站请求伪造。
+CSRF 可以简单理解为：攻击者盗用了你的身份，以你的名义发送恶意请求，容易造成个人隐私泄露以及财产安全。
+攻击的关键是获得授权，所以无需进行cookie劫持拿到session cookie，直接跨站发起请求就可以了，这就是CSRF。
+
+> session和cookie都是绕开HTTP无状态性的手段，不过cookie是维护在客户端的数据，而seession是维护在服务器端的数据。用户访问服务器时，服务器会启动一个session，并将标识这个seesion的 session ID作为一个cookie发给用户，用户通过这个session ID和服务器交互表明状态身份。注意，为了安全起见，session ID不会设置expires和max-age，cookie会在浏览器退出时销毁，而服务端的session在一段时间之后自动销毁。
+
+
+虽然，cookie有同源策略保证安全：
+- 本网页无法通过`document.cookie`获得存储在本网页下的跨域cookie
+- 同窗口的tab页面无法获取本网页下的cookie
+- 发送跨域请求时，默认是不会携带cookie
+
+但是，img的get请求可以跨过同源策略发请求，要知道img会向目标URL发送请求时HTTP会自动携带上该URL域的现存的cookie，要知道此时session ID还存储在内存中，所以session ID会随请求抵达服务器。    
+
+`<img src=http://www.mybank.com/transfer.php?toBankId=11&money=1000>`
+
+就算img的get请求走不通，还是可以通过`iframe`发送搞事情。
+```
+<body onload="steal()">
+    <iframe name="steal" display="none">
+　　     <form method="POST" name="transfer"　action="http://www.myBank.com/transfer.php">
+　　	    <input type="hidden" name="toBankId" value="11">
+　　	    <input type="hidden" name="money" value="1000">
+　　     </form>
+    </iframe>
+</body>
+```
+
+## 防范CSRF攻击
+### 1. 添加token验证
+CSRF攻击要成功的条件在于攻击者能够准确地预测所有的参数从而构造出合法的请求，所以根据不可预测性原则，我们可以对参数进行加密从而防止CSRF攻击，可以保存其原有参数不变，另外添加一个参数Token，其值是随机的，这样攻击者因为不知道Token而无法构造出合法的请求进行攻击，所以我们在构造请求时候只需要保证：
+
+- Token要足够随机，使攻击者无法准确预测
+- Token是一次性的，即每次请求成功后要更新Token，增加预测难度
+- Token要主要保密性，敏感操作使用POST，防止Toke出现在URL中
+
+### 2. 关键操作只接受POST请求
+
+### 3. 添加验证码校验
+
+如果每次操作都需要用户进行互动输入验证码，从而简单有效地防御了CSRF的攻击。
+
+
+### 4. 检测 Referer
+HTTP头部具有refererz字段，指示该请求的源，通过检查Referer的值，我们就可以判断这个请求的来源是合法的还是非法的。
+
+**最后推荐一本书《web前端黑客技术揭秘》，这里面关于XSS和CSRF的问题讲得很透彻。**
+
+## Reference
+1. [谈谈对 Web 安全的理解](https://juejin.im/entry/58bad941128fe100643fb35b)
+2. [浏览器关闭后，Session会话结束了么](https://blog.csdn.net/stanxl/article/details/47105051)
+3. [cookie劫持](https://zhuanlan.zhihu.com/p/32089906)
+4. [浅谈CSRF攻击方式](http://www.cnblogs.com/hyddd/archive/2009/04/09/1432744.html)
