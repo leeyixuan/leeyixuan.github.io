@@ -13,7 +13,7 @@ tags:
 
 
 
-经常有人说cookie是一种web存储技术，其实不然。cookie的存储空间只有4K，一般用来存储用户信息，标识用户身份和状态。cookie正确的打开方式是：通过携带的用户信息绕过HTTP无状态性的问题。
+经常有人说cookie是一种web存储技术，其实不然。cookie的存储空间只有4K，一般用来存储用户信息，标识用户身份和状态(session cookie)。cookie正确的打开方式是：通过携带的用户信息绕过HTTP无状态性的问题。
 
 cookie是服务端通过HTTP头部的`set-cookie`字段下发的，浏览器接收到之后，会将cookie保存到本地。
 >如果cookie的expires/max-age字段设置为过去时，或者是没有设置expires/max-age字段，那么该cookie就不会存储到内存中，该cookie在会话结束之后自动销毁。
@@ -52,7 +52,7 @@ cookie分为session cookie和永久cookie就是取决于expires/max-age字段。
 
 当cookie带httpOnly选项时，客户端则无法通过脚本去访问（包括读取、修改、删除等），只会在HTTP通信时传递。
 > httponly字段可以保证网页不受XSS攻击。具体内容可见我之前写的文章：
-> [《XSS和CSRF》]()
+> [《XSS和CSRF攻防》](https://leeyixuan.github.io/2018/04/27/XSS/)
 
 ### secure
 secure选项用来设置cookie只在确保安全的请求中才会发送。当请求是HTTPS或者其他安全协议时，包含 secure 选项的 cookie 才能被发送至服务器。
