@@ -1,0 +1,199 @@
+---
+layout:     post
+title:      "深入学习执行上下文和作用域"
+subtitle:   "js进阶"
+date:       2017-9-26
+author:     "leeyixuan"
+header-img: "img/background/post-bg-js.jpg"
+tags:
+    - js
+---
+## 作用域
+- 作用域(Scope)是指程序源代码中**定义变量的区域**。
+
+- 作用域规定了**如何查找变量**，也就是确定当前执行代码对变量的访问权限。
+
+- JavaScript 采用词法作用域(lexical scoping)，也就是**静态作用域**。
+- 词法作用域，函数的作用域在**函数定义**的时候就决定了。
+
+```
+var value = 1;
+
+function foo() {
+    console.log(value);
+}
+
+function bar() {
+    var value = 2;
+    foo();
+}
+
+bar();//1
+```
+```
+var scope = "global scope";
+function checkscope(){
+    var scope = "local scope";
+    function f(){
+        return scope;
+    }
+    return f;
+}
+checkscope()();//global scope
+```
+```
+var scope = "global scope";
+function checkscope(){
+    var scope = "local scope";
+    function f(){
+        return scope;
+    }
+    return f();
+}
+checkscope();//local scope 
+```
+- JavaScript的作用域基于函数创建的位置。
+- 函数的作用域链的创建的过程也印证了这一点：作用域链=[[Scope]]+当前函数的变量对象
+- [[Scope]]：当前函数所在的作用域的作用域链。
+
+
+## 执行上下文
+execution context，执行环境/执行上下文。   
+在javascript中，执行上下文可以抽象的理解为一个object（绝对不是变量对象！变量对象是执行上下文的一部分），每个执行上下文抽象为一个对象并有三个属性：
+活动对象、作用域链、this。
+```
+executionContext：{
+    variable object：vars,functions,arguments,
+    scope chain: variable object + all parents scopes
+    thisValue: context object
+}
+}
+```
+
+
+###  1. 活动对象与变量对象
+ - 变量对象     
+ 每一个执行上下文都会分配一个变量对象(variable object)，变量对象的属性由变量(variable) 和 函数声明(function declaration)构成。   
+ 在函数上下文中，参数列表(parameter list)也会被加入到变量对象中作为属性。   
+全局上下文中的变量对象就是全局对象，在浏览器中就是window，可以直接访问。    
+变量对象与当前作用域息息相关。     
+不同作用域的变量对象互不相同，它保存了当前作用域的所有函数和变量。
+
+- 活动对象  
+函数上下文中，活动对象就等于变量对象，不能直接访问。   
+在一些平台中，实现了`_parent_`来直接访问函数的变量对象。   
+活动对象是在进入函数上下文时刻被创建的，它通过函数的arguments属性初始化。
+函数被调用时，在函数的执行上下文会创建一个活动对象AO，并且被初始化为 `AO = [arguments]`。随后AO又被当做变量对象(variable object)添加函数声明和变量声明，此时 `VO = [arguments].concat([函数声明，变量声明])`。
+
+### 2. 作用域链
+Scope = AO + [[Scope]]   
+[[scope]]是所有父变量对象的层级链，处于当前函数上下文之上，在函数创建时存于其中。
+
+
+
+```
+function test(num){
+    var a = "2";
+    return a+num;
+}
+test(1);
+```
+- 进入function test，test函数会维护一个私有属性 [[scope]]，并使用当前环境的作用域链初始化，在这里就是 test.[[Scope]]=global scope。
+- test函数执行，这时候会为test函数创建一个执行环境，然后通过复制函数的[[Scope]]属性构建起test函数的作用域链。此时 test.scopeChain = [test.[[Scope]]]。
+- test函数的活动对象被初始化，随后活动对象被当做变量对象用于初始化。即 test.variableObject = test.activationObject.contact[num,a] = [arguments].contact[num,a]
+- test函数的变量对象被压入其作用域链，此时 test.scopeChain = [ test.variableObject, test.[[scope]]];
+至此test的作用域链构建完成。
+
+**复制函数的[[Scope]]变量构建作用域链——>创建活动对象——>活动对象被压入作用域链前端**
+
+
+### 3. this
+>具体内容见我之前写过的文章：[《this》](https://leeyixuan.github.io/2017/08/15/this/)
+
+
+## 处理执行上下文的过程
+每次调用函数，都会创建并激活新的上下文。
+处理执行上下文，分为两个阶段：
+
+
+
+第一阶段： 执行代码之前，进入上下文
+当函数被调用，但未执行任何其内部代码之前，先创建上下文（创建作用域链，创建变量对象，查找this）。
+
+1. **作用域链：**
+- 复制函数的[[Scope]]属性构建起函数的作用域链
+- 变量对象被压入其作用域链的前端
+
+
+2. **变量对象：**
+- **函数形参**(如果我们是在函数执行上下文中)：
+	 由名称和对应值组成的一个变量对象的属性被创建；没有传递对应参数的话，那么由名称和undefined值组成的一种变量对象的属性也将被创建。
+- **函数声明**：
+	为发现的每一个函数，在变量对象上创建一个属性，指向函数的指针（就是函数名）。
+	如果变量对象已经存在相同名称的属性，则完全替换这个属性。
+- **变量声明**：
+	为发现的每个变量声明，在变量对象上创建一个属性，并且将属性的值初始化为undefined。
+	 如果变量的名字和已经声明的形式参数或函数相同，将不会进行任何操作。
+3. **“this”的值（调用函数时确定的）**
+
+第二阶段： 代码执行
+在当前上下文上运行/解释函数代码，在这个过程中不断修改变量对象中的属性值。
+
+注：在全局上下文和函数上下文中的表现是一样的。
+
+
+
+
+## 执行上下文栈
+- 当javascript解释器初始执行代码，它首先默认环境是全局上下文。
+
+- js解释器运行阶段还会维护一个环境栈 ，当执行流进入一个函数时，函数的环境就会被压入环境栈，当函数执行完后会将其环境弹出，并将控制权返回前一个执行环境。环境栈的顶端始终是当前正在执行的环境。
+- 每次调用一个函数将会创建一个新的执行上下文，并且会被添加到执行上下文栈的顶部。
+- 浏览器总是运行在当前执行上下文（作用域链前端）。一旦完成，当前执行上下文将从栈顶被移除并且将控制权归还给之前的执行上下文。
+
+
+## 执行上下文栈工作流程
+
+1. 全局上下文被压入执行上下文栈，创建全局执行上下文，执行全局代码
+2. 进入函数，创建函数上下文
+- 复制函数[[scope]]属性创建作用域链
+- 用 arguments 创建活动对象，随后初始化活动对象，加入形参、函数声明、变量声明
+- 将活动对象压入作用域链顶端
+- 求出上下文内部“this”的值      
+3. 函数执行上下文被压入执行上下文栈   
+4. 执行函数，随着函数的执行，修改 AO 的属性值
+5.  函数执行完毕，函数上下文从执行上下文栈中弹出
+6.  进入下一个函数。。。
+
+**总结**：
+进入函数，创建函数上下文（作用域链、变量对象、this）——>当前函数上下文被压入环境栈——>执行函数——>函数执行完毕——>函数上下文从环境栈中弹出
+# 其他
+### 执行上下文栈和作用域链的区别
+- 相同点：都是链式结构
+- 不同点：
+	- 执行上下文栈描述了整个程序的**函数调用顺序**，是一个动态变化的整体性概念，用于管理创建的那么多执行上下文
+	- 作用域链则是方便具体每个函数获取变量，内嵌于每个独立的函数作用域内，在**定义函数时就已经确定**
+
+### 作用域和变量对象的区别
+- 这两者基本上是一个概念，不过作用域是一个抽象的概念，变量对象是一个具体的概念。
+- 作用域是基于变量对象的，影响每次函数调用时的变量的访问。
+
+### 作用域和执行上下文的区别
+- 执行上下文>作用域
+- 执行上下文包括：this、作用域链、变量对象
+- 作用域近似等于变量对象
+- 实际上，作用域链=变量对象+父环境作用域链
+
+# Reference
+1.[认识javascript中的作用域和上下文][1]   
+2.[一道js面试题引发的思考 · Issue #18 · kuitos/kuitos.github.io][2]   
+3.[JavaScript深入之词法作用域和动态作用域 · Issue #3 · mqyqingfeng/Blog][3]  
+4.[JavaScript深入之执行上下文栈 · Issue #4 · mqyqingfeng/Blog][4]  
+5.[深入理解JavaScript系列（12）：变量对象（Variable Object） - 汤姆大叔 - 博客园][5]
+
+
+  [1]: http://yanhaijing.com/javascript/2013/08/30/understanding-scope-and-context-in-javascript/
+  [2]: https://github.com/kuitos/kuitos.github.io/issues/18
+  [3]: https://github.com/mqyqingfeng/Blog/issues/3
+  [4]: https://github.com/mqyqingfeng/Blog/issues/4
+  [5]: http://www.cnblogs.com/TomXu/archive/2012/01/16/2309728.html

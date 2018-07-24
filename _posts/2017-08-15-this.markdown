@@ -1,0 +1,78 @@
+---
+layout:     post
+title:      "this"
+subtitle:   ""
+date:       2017-8-15
+author:     "leeyixuan"
+header-img: "img/background/post-bg-js.jpg"
+tags:
+    - js
+---
+
+## 定义
+    
+this的值不是在函数创建时决定，具有**动态性**。  
+this的值由调用者提供，由函数的**调用方式**决定。     
+函数中的this如果不在调用时改变的话，this就是全局变量；对象中的this如果不在调用时改变的话，this就是该对象本身。
+
+this不能像变量赋值一样为this赋值。    
+this的值只会在**进入上下文**时决定，并且在**执行过程中不可变**。    
+this是永远不会沿作用域链或原型链出现一个“查找”的过程的，只会在**函数调用时就完全确认**。内部函数在搜索这个变量时，只会搜索到其活动对象为止，因此**永远不可能直接访问外部函数中的这两个变量**。
+
+
+
+## 调用方式
+- 直接被调用，此时 this 绑定到全局对象(在函数中调用函数也是直接调用)。在浏览器中，window 就是该全局对象。（然而，在**严格模式**下，this将保持他进入执行上下文时的值，所以下面的this将会默认为**undefined**。）
+- 作为**对象方法**调用，this指向那个对象。
+- 作为**匿名函数**的执行环境具有全局性，this通常指向Window。（这里不是闭包，闭包是一种特殊的匿名函数）
+- 使用 **apply 或 call** 调用，在 JavaScript 中函数也是对象，对象则有方法，apply 和 call 就是函数对象的方法。这两个方法异常强大，他们允许切换函数执行的上下文环境（context），即 this 绑定的对象。
+- 作为**构造函数**调用，this 绑定到新创建的对象上。
+- 作为**DOM事件处理函数**调用，this指向事件处理函数绑定的元素。
+
+
+
+
+## 语法糖
+将 **apply 或 call 方式作为函数调用的基本方式**，其他几种方式都是在这一基础上的演变，或称之为**语法糖**。
+
+函数调用时 this 绑定的过程，不管函数以何种方式调用，均需完成这一绑定过程。     
+不同的是，作为函数调用时，this 绑定到全局对象；作为方法调用时，this 绑定到该方法所属的对象。
+
+```
+func(p1, p2) 等价于
+func.call(undefined, p1, p2)//如果你传的 context 不是一个对象，那么 window 对象就是默认的 context。
+
+obj.child.method(p1, p2) 等价于
+obj.child.method.call(obj.child, p1, p2)
+```
+
+## 其他
+- var
+	- 在定义对象时，使用**对象字面量**表示法，不使用var。该花括号（{ }）指的是**表达式上下文（expression context）**，表示一个表达式。而if语句中的花括号（{ }）指的是**语句上下文（statement context）**，表示一个语句块，并没有划分作用域。
+	- JavaScript中的对象只能使用String类型作为键类型。一个对象的**属性名**可以是任何有效的 **JavaScript 字符串**。
+- call和apply方法的作用相同，区别仅仅在于**接收参数的方式不同**
+	- apply是参数数组arguments。
+	- call必须把参数逐个列举出来。
+- new构造函数实际上做了4件事
+	-  创建一个新对象
+	-  this值赋给新对象
+	-  return返回新对象
+	-  执行构造函数内部代码
+-  在事件处理程序内部：
+	-  this始终等于currentTarget——事件处理函数的注册的元素
+	-  Target——事件正在的目标
+-  一个对象就是一系列属性的集合，一个属性包含一个名和一个值。一个属性的值可以是函数，这种情况下属性也被称为方法。
+	-  一个方法 是关联到某个对象的函数，或者简单地说，一个方法是一个值为某个函数的对象属性。
+	-  对象的方法是特殊的对象属性。
+	
+## Reference
+1.[JavaScript中的对象查找][1]   
+2.[深入浅出 JavaScript 中的 this][2]    
+3.[this - JavaScript | MDN][3]    
+4.[如何理解 JavaScript 中的 this 关键字?][4]   
+
+
+  [1]: http://otakustay.com/object-lookup-in-javascript/
+  [2]: https://www.ibm.com/developerworks/cn/web/1207_wangqf_jsthis/
+  [3]: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/this
+  [4]: https://www.zhihu.com/question/19636194
