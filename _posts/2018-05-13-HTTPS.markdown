@@ -41,15 +41,15 @@ SSL位于HTTP和TCP之间。
 ## SSL协议的握手过程
 HTTPS建立安全通信之前，有五次安全握手的流程：
 
-第一步，浏览器给出协议版本号、一个随机数（Client random），以及加密方法。
+第一步，浏览器给出协议版本号、一个随机数（Client random），以及加密方法，比如RSA加密，此时是明文传输。
 
 第二步，服务器确认双方使用的加密方法，并给出数字证书、以及一个随机数（Server random）。
 
-第三步，浏览器确认数字证书有效，然后生成一个新的随机数（Premaster secret），并使用数字证书中的公钥，加密这个随机数，发给服务器。
+第三步，浏览器确认数字证书有效，并取出数字证书中的公钥，然后生成一个新的随机数（Premaster secret），使用公钥以及指定的加密方加密这个随机数，发给服务器。利用Client random、Server random和Premaster secret通过一定的算法生成HTTP链接数据传输的对称加密key-`session key`。
 
-第四步，服务器使用自己的私钥，获取浏览器发来的随机数（即Premaster secret）。
+第四步，服务器使用自己的私钥和已知的加密方法，获取浏览器发来的随机数（即Premaster secret）。和浏览器相同规则生成`session key`
 
-第五步，浏览器和服务器根据约定的加密方法，使用前面的三个随机数，生成"对话密钥"（session key），用来加密接下来的整个对话过程。
+第五步，浏览器和服务器利用Client random、Server random和Premaster secret通过一定的算法生成HTTP链接数据传输的对称加密key-`session key`，用来加密接下来的整个对话过程。
 
 
 **注意**：

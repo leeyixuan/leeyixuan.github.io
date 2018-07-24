@@ -2,7 +2,7 @@
 layout:     post
 title:      "HTTP"
 subtitle:   ""
-date:       2018-5-13
+date:       2018-5-14
 author:     "leeyixuan"
 header-img: "img/background/post-bg-flex.jpg"
 tags:
@@ -34,9 +34,10 @@ POST相对GET安全一点点，因为GET请求都包含在URL里，且会被浏�
 
 ## 重定向
  <img class="shadow" width="450" src="https://www.github.com/CoolRabbit520/photos/raw/master/小书匠/1532350961102.png" />
+重定向由服务器发送特殊的响应而触发。浏览器接收重定向响应之后会使用响应提供的URL重发一次请求。
 
 重定向的目的：
-- 正确处理请求（资源已经被分配到了新的URL上）
+- 正确处理请求（资源已经被分配到了新的URL上，网页扩展名改变）
 - 最小化时延
 - 节约网络带宽
 
@@ -55,6 +56,30 @@ POST相对GET安全一点点，因为GET请求都包含在URL里，且会被浏�
 - 300(Multiple Choice)：所有的选项在消息主体的HTML页面中列出。也可以返回 200 OK 状态码。
 - 304(Not Modified)：该状态码表示缓存值依然有效，可以使用。
 
+
+注意：
+- HTTP响应除了返回3XX的状态码，还会返回一个`location`字段，告知浏览器随后向该URL发起请求。
+- 除了307（临时重定向）和308（永久重定向），浏览器接随后会发送get方法的HTTP请求。
+
+301和302的区别：
+- 相同点：
+301和302状态码都表示重定向，就是说浏览器在拿到服务器返回的这个状态码后会自动跳转到一个新的URL地址，这个地址可以从响应的Location首部中获取（用户看到的效果就是他输入的地址A瞬间变成了另一个地址B）——这是它们的共同点。
+
+- 不同点：
+301是永久重定向，302是临时重定向。
+301表示旧地址A的资源已经被永久地移除了（这个资源不可访问了），搜索引擎在抓取新内容的同时也将旧的网址交换为重定向之后的网址；
+302表示旧地址A的资源还在（仍然可以访问），这个重定向只是临时地从旧地址A跳转到地址B，搜索引擎会抓取新的内容而保存旧的网址。 SEO302好于301。
+
+
+除了HTTP重定向，还有其他重定向方法。
+- HTML meta元素
+```
+<head> 
+  <meta http-equiv="refresh" content="0;URL=http://www.example.com/" />
+</head>
+```
+- js ` window.location `
+`window.location = "http://www.example.com/";`
 ## 长连接
 HTTP/1.0的时候，每进行一次HTTP通信就断开一次TCP连接。    
 当浏览器浏览一个包含多张照片的HTML页面的场景下，每次TCP都会造成许多无谓的TCP连接建立和端口，增加通信量的开销。
@@ -74,9 +99,11 @@ HTTP/1.1提出**持久连接 keep-alive**的方法。
 HTTP/1.1默认是持久连接，因此会自动填充`connection：keep-alive`。   
 当服务器想明确断开连接时，则指定`connection：close`。   
 
+
 **注意**：
 
-长连接只是在一次HTTP请求响应后，不断开TCP连接，继续下一个HTTP请求响应。并不是多个HTTP请求并行！！同一域名下的多个HTTP请求并行是HTTP/2.0的特性。
+1. 长连接只是在一次HTTP请求响应后，不断开TCP连接，继续下一个HTTP请求响应。并不是多个HTTP请求并行！！同一域名下的多个HTTP请求并行是HTTP/2.0的特性。
+2. keep-alive不会永远保持，它有一个持续时间，一般在服务器中配置（如apache），另外长连接需要客户端和服务器都支持时才有效。
 
 
 ## HTTP/2.0

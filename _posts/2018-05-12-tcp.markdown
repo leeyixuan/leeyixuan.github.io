@@ -48,20 +48,20 @@ TCP用于在传输层有必要实现可靠传输的情况；而在一方面，UD
  <img class="shadow" width="450" src="https://www.github.com/CoolRabbit520/photos/raw/master/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1522410518079.jpg" />
 
 ### 三次握手时序
-第一次握手：client发送syn＝1（**位码**）,随机产生seq number=x的数据包到server,server由SYN=1知道发送方要求建立联机;
+第一次握手：client发送SYN＝1（**位码**）,随机产生seq number=x的数据包到server,server由SYN=1知道发送方要求建立联机;
 
-第二次握手：server收到请求后要确认联机信息，向client发送ack number=x+1,syn=1（**位码**）,ack=1（**位码**）,随机产生seq=y的包;
+第二次握手：server收到请求后要确认联机信息，向client发送ack number=x+1,SYN=1,ACK=1（**位码**）,随机产生seq number=y的包;
 
-第三次握手：client收到后检查ack number是否正确，即第一次发送的seq number+1,以及位码ack是否为1，若正确，client会再发送ack number=y+1，ack=1（**位码**），server收到后确认seq=seq+1,ack=1则连接建立成功。
+第三次握手：client收到后检查ack number是否正确，即第一次发送的seq number+1,以及位码ack是否为1，若正确，client会再发送ack number=y+1，ACK=1，server收到后确认seq=seq+1,ACK=1则连接建立成功。
 
 ### 四次挥手时序
 第一次挥手：client发送FIN＝1（**位码**）,随机产生seq number=x的数据包到server,server由FIN=1知道发送方要求拆除连接;
 
-第二次挥手：server收到请求后要确认拆除连接信息，向client发送ack number=x+1,ack=1（**位码**）。此时，client不会再向server发送数据，但是server还能继续向client发送数据;
+第二次挥手：server收到请求后要确认拆除连接信息，向client发送ack number=x+1,ACK=1。此时，client不会再向server发送数据，但是server还能继续向client发送数据;
 
-第三次挥手：server结束发送数据，拆除连接。server发送FIN＝1（**位码**）,随机产生seq number=y的数据包到client。
+第三次挥手：server结束发送数据，拆除连接。server发送FIN＝1,随机产生seq number=y的数据包到client。
 
-第四次挥手：client收到FIN=1后，正式关闭拆除连接。向server发送ack number=x+1,ack=1（**位码**）。
+第四次挥手：client收到FIN=1后，正式关闭拆除连接。向server发送ack number=x+1,ACK=1。
 ### 为什么要三次握手
 **“三次握手”的目的是“为了防止已失效的连接请求报文段突然又传送到了服务端，因而产生错误”。**
 
