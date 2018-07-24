@@ -1,0 +1,79 @@
+---
+layout:     post
+title:      "函数声明提升和变量声明提升"
+subtitle:   ""
+date:       2017-5-13
+author:     "leeyixuan"
+header-img: "img/background/post-bg-git.jpg"
+tags:
+    - js
+---
+
+## 变量声明提升
+ 只有变量的**声明**被提前到作用域的开始处了，而**赋值**操作被保留在原处。
+ ```
+ (function() {
+  console.log(declaredLater);  // Outputs: undefined
+  var declaredLater = "Now it's defined!";
+  console.log(declaredLater);  // Outputs: "Now it's defined!"
+})();
+```
+
+```
+var a = 1;
+
+function hehe(){
+         window.console.log(a);//undefined,变量声明提升，但是变量赋值过程没有提升。
+         var a = 2;
+         window.console.log(a);//2
+}
+hehe();
+```
+
+## 函数声明提升
+函数的“被提前”还要分两种情况，一种是函数声明，第二种是函数作为值赋值给变量。
+### 函数声明
+```
+isItHoisted();// Outputs: "Yes!"
+
+function isItHoisted() {  
+    console.log("Yes!");
+}
+```
+JavaScript 解释器允许你在函数声明之前使用，也就是说，函数声明并不仅仅是函数名“被提前”了，整个函数的定义也“被提前”了
+### 匿名函数赋值
+```
+definitionHoisted();// Outputs: "Definition hoisted!"
+definitionNotHoisted();// TypeError: undefined is not a function
+
+function definitionHoisted() {  
+    console.log("Definition hoisted!");
+}
+
+var definitionNotHoisted = function () {  
+    console.log("Definition not hoisted!");
+};
+```
+函数名“被提前”了，但是他的赋值（也就是函数）并没有被提前，从这一点上来说，和前面我们所讲的变量“被提前”是完全一致的，并且，由于“被提前”的变量的默认值是 undefined ，所以报的错误属于“类型不匹配”，因为 undefined 不是函数，当然不能被调用。
+
+## 总结
+- 变量的声明被提前到作用域顶部，赋值保留在原地。
+- 函数声明整个“被提前”。
+- 函数作为值赋给变量时只有变量“被提前”了，函数没有“被提前”。
+- **变量（函数）声明提升是将位置提升到顶部，原位置就没有该变量（函数）了。**
+
+
+## 其他
+Javascript里的基本变量是存放在栈区的，存放**变量标示符**和**变量的值**。
+javascript里引用变量的存储就比基本类型存储要复杂多，引用类型的存储需要内存的栈区和堆区（堆区是指内存里的堆内存）共同完成。	在栈区存放**变量标示符**和**堆地址**，在堆内存放**存贮的对象**。
+- 当变量只有声明没有赋值时，那么该变量只有栈区的标示符，提示“undefined”
+- 当变量未定义时，提示“variable is not defined”
+
+
+## Reference
+1. [JavaScript 中对变量和函数声明的“提前（hoist）” - 为程序员服务][1]
+2. [谈谈javascript语法里一些难点问题（一） - 夏天的森林 - 博客园][2]
+
+
+  [1]: http://ju.outofmemory.cn/entry/128116
+  [2]: http://www.cnblogs.com/sharpxiajun/p/4133462.html
