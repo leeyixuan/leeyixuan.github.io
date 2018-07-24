@@ -6,7 +6,7 @@ date:       2018-4-27
 author:     "leeyixuan"
 header-img: "img/background/post-bg-XSS.jpg"
 tags:
-    - 工程化
+    - web安全
 ---
 
 之前在做项目的时候，有一个业务场景是用户创建群，之后填写并显示群信息。    
