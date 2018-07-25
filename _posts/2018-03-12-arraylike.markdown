@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      "类数组对象"
-subtitle:   "arguments|nodelist|HTML collection"
+subtitle:   ""
 date:       2018-3-12
 author:     "leeyixuan"
 header-img: "img/background/post-bg-arraylike.jpg"

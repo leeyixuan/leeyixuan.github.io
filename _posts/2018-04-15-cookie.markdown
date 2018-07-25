@@ -25,8 +25,11 @@ cookie是服务端通过HTTP头部的`set-cookie`字段下发的，浏览器接�
 ## cookie的字段
 ### domain
 domain表示的是cookie所在的域，默认为URL的域名。
-创建cookie时，需要设置domain，有多级域名时，可以控制cookie的作用域。
+创建cookie时，需要设置domain，有多级域名时，可以控制cookie的作用域。     
+
 子域cookie机制：
+
+
 - domain设为父域名时，父域名和其下所有子域名可以共享该cookie；
 - domain设为本URL的域名时，父域名、本域名和本域名下的子域名可以共享该cookie；
 - domain设为和本URL的域名同级的兄弟域名时，只有兄弟域名和其下所有子域名可以共享该cookie；
@@ -99,7 +102,8 @@ CORS请求默认不发送cookie和HTTP认证信息。如果要把cookie发到服
 var xhr = new XMLHttpRequest();
 xhr.withCredentials = true;
 ```
-
+>设置cookie：一个页面可以为本域和任何父域设置cookie，只要是父域不是公共后缀即可。
+读取cookie：不管使用哪个协议或端口号，浏览器都允许给定的域以及其任何子域名访问 cookie。
 
 ## Reference
 1. [聊一聊 cookie](https://segmentfault.com/a/1190000004556040)

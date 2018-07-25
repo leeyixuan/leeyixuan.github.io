@@ -49,7 +49,7 @@ coockie 是通过HTTP文件头来在web服务器和浏览器之间进行交流�
 - 较早地Expire时间和不要过早去清除coockie，都会改善用户的响应时间。
 - 图片等静态资源也会携带cookie，而这些cookie毫无意义，应该使用隔离的不带cookie域名存放静态资源。
 >相关细节可见我之前写过的文章：   
-[《重绘和回流》](https://leeyixuan.github.io/2017/11/28/reflow/)
+[《cookie》](https://leeyixuan.github.io/2018/04/15/cookie/)
 
 ## 8. 资源预加载和延迟加载
 
