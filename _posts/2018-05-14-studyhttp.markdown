@@ -63,7 +63,7 @@ POST相对GET安全一点点，因为GET请求都包含在URL里，且会被浏�
 
 301和302的区别：
 - 相同点：
-301和302状态码都表示重定向，就是说浏览器在拿到服务器返回的这个状态码后会自动跳转到一个新的URL地址，这个地址可以从响应的Location首部中获取（用户看到的效果就是他输入的地址A瞬间变成了另一个地址B）——这是它们的共同点。
+301和302状态码都表示重定向，就是说浏览器在拿到服务器返回的这个状态码后会自动跳转到一个新的URL地址，这个地址可以从响应的Location首部中获取（用户看到的效果就是他输入的地址A瞬间变成了另一个地址B）。
 
 - 不同点：
 301是永久重定向，302是临时重定向。
@@ -73,13 +73,18 @@ POST相对GET安全一点点，因为GET请求都包含在URL里，且会被浏�
 
 除了HTTP重定向，还有其他重定向方法。
 - HTML meta元素
-```
+
+```html
 <head> 
   <meta http-equiv="refresh" content="0;URL=http://www.example.com/" />
 </head>
 ```
-- js ` window.location `
-`window.location = "http://www.example.com/";`
+- js  `window.location`
+
+```javascript
+window.location = "http://www.example.com/";
+
+```
 ## 长连接
 HTTP/1.0的时候，每进行一次HTTP通信就断开一次TCP连接。    
 当浏览器浏览一个包含多张照片的HTML页面的场景下，每次TCP都会造成许多无谓的TCP连接建立和端口，增加通信量的开销。
@@ -110,14 +115,14 @@ HTTP/1.1默认是持久连接，因此会自动填充`connection：keep-alive`�
 HTTP/2.0在与HTTP/1.1完全语义兼容的基础上，进一步减少了网络延迟，大幅度的提升了web性能。
 
 HTTP/2.0具有以下特性：
-### 1. 多路复用 (Multiplexing)：实现多流并行。
+### 1. 多路复用 (Multiplexing)：实现多流并行
 在 HTTP/1.1协议中，浏览器客户端在同一时间，针对同一域名下的请求有一定数量限制。超过限制数目的请求会被阻塞。
 
  <img class="shadow" width="450" src="https://www.github.com/CoolRabbit520/photos/raw/master/小书匠/1532358933354.png" />
 
 多路复用允许同时通过单一的HTTP/2连接发起多重的请求-响应消息。HTTP/2.0通信都在一个连接上完成，这个连接可以承载任意数量的双向数据流。
 
-因此，没有不需要合并HTTP请求，比如精灵图。合并HTTP请求之后，反而效果变差。
+因此，不需要合并HTTP请求，比如精灵图。合并HTTP请求之后，反而效果变差。
 
 ### 2. 二进制分帧：改进传输性能，实现低延迟和高吞吐量
 应用层(HTTP/2.0)和传输层(TCP或UDP)之间增加一个二进制分帧层。

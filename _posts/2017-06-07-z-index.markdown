@@ -63,6 +63,7 @@ z-index 属性是用来设置元素的堆叠顺序。
 
 
  > **疑惑 4**. 所以说，float元素的z-index是什么？难道是0？没有position/float的元素，float元素和position元素，这三个世界的初始高度（没有设置z-index）是什么？
+
 **demo**:
 <iframe height='400' scrolling='no' title='z-index(4）' src='//codepen.io/Imomo/embed/vpJgBp/?height=85&theme-id=33983&default-tab=css,result&embed-version=2' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a href='https://codepen.io/Imomo/pen/vpJgBp/'>z-index(4）</a> by Imomo (<a href='https://codepen.io/Imomo'>@Imomo</a>) on <a href='https://codepen.io'>CodePen</a>.
 </iframe>
@@ -73,7 +74,8 @@ z-index 属性是用来设置元素的堆叠顺序。
 - z-index 仅能在定位元素上奏效。
 - float是比没有设置z-index的position要低的，而且float比什么都没有设置的元素要高。
 - z-index=-1时，position是低于float和普通元素的。
-- 没有设置z-index的position就相当于z-index=0。更更并且，z-index只能是整数。    
+- 没有设置z-index的position就相当于z-index=0。更更并且，z-index只能是整数。
+    
 综上，我进行了一下假设加深我对z-index的理解：   
 （1）没有设置z-index的定位元素，z-index=0   
 （2）float元素，z-index=-0.1   

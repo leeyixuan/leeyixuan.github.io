@@ -38,7 +38,7 @@ tags:
 针对目标URL生成HTTP请求报文。
 一个HTTP请求报文由三部分构成：请求行(方法、URL、版本号)、请求头、请求主体。
 记序号及端口号后转发给网络层进行IP路由。
-> HTTP的具体内容可以查看我文章：[《HTTP》](https://leeyixuan.github.io/2018/05/14/http/)
+> HTTP的具体内容可以查看我文章：[《HTTP》](https://leeyixuan.github.io/2018/05/14/studyhttp/)
 
 ### 3.2 TCP三次握手建立连接
 传输层把从应用层接收到的数据（HTTP请求报文）进行分割，并在各个报文上打上标记序号及端口号后转发给网络层进行IP路由。
@@ -72,7 +72,7 @@ HTTPS是在HTTP基础上多套了一层SSL安全套接层。SSL位于HTTP和TCP�
 
 第五步，浏览器和服务器根据约定的加密方法，使用前面的三个随机数，生成"对话密钥"（session key），用来加密接下来的整个对话过程。
 
->具体详见我之前写过的文章：[《HTTPS》](https://leeyixuan.github.io/2018/05/13/HTTPS/)
+>具体详见我之前写过的文章：[《HTTPS》](https://leeyixuan.github.io/2018/05/13/studyHTTPS/)
 
 
 ## 5. 服务器处理请求
