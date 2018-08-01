@@ -22,7 +22,7 @@ BFC全称是Block Formatting Context，即块格式化上下文。它是[CSS2.1�
 **总结**：
 1.  浮动元素
 2. 绝对定位元素（元素的position为absolute或fixed）
-3.  display属性是inline-blocks, table-cells和table-captions的元素
+3.  display属性是inline-block, table-cells和table-captions的元素
 4.  具有overflow属性（visible除外）的block box
 5. display属性是flex或inline-flex的元素（css3中新增）
 
