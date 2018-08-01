@@ -129,12 +129,14 @@ diff命令可以比较不同文件对象的差异：
 ### 场景举例
 
 **场景1**：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改。   
-step1：用命令`git checkout --<file>`。   
+用命令`git checkout --<file>`。   
 >如果file自修改后还没有被放到暂存区，撤销修改就回到和版本库一模一样的状态；file已经添加到暂存区后，又作了修改，撤销修改就回到添加到暂存区后的状态。
 
 **场景2**：当你不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改。   
 step1：用命令`git reset HEAD --<file>`暂存区的修改撤销掉（unstage），重新放回工作区。   
 step2：用命令`git checkout --<file>`直接丢弃工作区的修改时。   
+
+其实，也可以直接`git checkout HEAD --<file>`
 
 **场景3**：已经提交了不合适的修改到版本库时，想要撤销本次提交。    
 step1：用命令`git reset --hard commit_id`。
@@ -171,6 +173,6 @@ push代码之前可以通过`git remote -v`查看远程仓库的信息。
 4. [pro Git](https://git-scm.com/book/zh/v2/Git-%E5%9F%BA%E7%A1%80-%E8%8E%B7%E5%8F%96-Git-%E4%BB%93%E5%BA%93)
 
 
+sdfsd
 
-hhhhhhhh
-测试缓存区
+
