@@ -18,8 +18,9 @@ IFC只有在一个块级元素中仅包含行内级元素时才会生成。
 IFC内部的元素，被一行行的矩形框所包含，这些虚拟的矩形框，我们称为行框（line box）。这些参与生成IFC的行内级元素称为行内盒（inline-box），所有display:inline的非替换元素生成的盒是行内盒。
 
 
->块级元素(Block-level element)是那些视觉上会被格式化成块状的元素，通俗一点来说就是那些会换新行的元素。display 属性的：block, list-item, table, flex, grid 值都可以将一个元素设置成块级元素。
+>块级元素(Block-level element)是那些视觉上会被格式化成块状的元素，通俗一点来说就是那些会换新行的元素。display 属性的：block, list-item, table, flex, grid 值都可以将一个元素设置成块级元素。    
 >行内级元素(inline-level element)是那些不会为自身内容形成新的块，而让内容分布在多行中的元素。display 属性的：inline, inline-table, inline-block, inline-flex, inline-grid 值都可以将一个元素设置成行内级元素。
+
 ## IFC特性
 1. 内部的盒子会在水平方向，一个接一个地放置。
 

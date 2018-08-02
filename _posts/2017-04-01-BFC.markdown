@@ -10,7 +10,7 @@ tags:
 ---
 
 ## BFC是什么
-BFC全称是Block Formatting Context，即块格式化上下文。它是[CSS2.1标准](https://www.w3.org/TR/CSS21/visuren.html#block-formatting)定义的，关于CSS渲染定位的一个概念。它是一个独立的渲染区域，只有Block-level box参与， 它规定了内部的Block-level Box如何布局，并且与这个区域外部毫不相干。
+BFC全称是Block Formatting Context，即块格式化上下文。它是[CSS2.1标准](https://www.w3.org/TR/CSS21/visuren.html#block-formatting)定义的，关于CSS渲染定位的一个概念。它是一个独立的渲染区域，只有Block-level box参与， 它规定了内部的Block-level box如何布局，并且与这个区域外部毫不相干。
 
 
 ## 触发BFC
