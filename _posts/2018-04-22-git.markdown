@@ -34,8 +34,9 @@ step6：再次使用`git push`，推送代码。
 另外，`git pull`提示`no tracking information`，则说明当前本地分支和远程分支的链接关系没有创建，用命令`git branch --set-upstream-to <branch-name> origin/<branch-name>`。
 ## 3. 老大让我合并分支，merge和rebase我用啥？
 merge和rebase都是合并命令，从效果来讲没有什么不同，不过从提交历史上看会有不同。   
-rebase在当前分支上重演另一个分支的历史，提交历史是线性的。   
-
+rebase在当前分支上重演另一个分支的历史，提交历史是线性的。
+下面的命令都在topic分支中进行，在master分支上重演topic分支的每一次版本提交，并且把topic分支指向新的节点。旧提交没有被引用，将被回收，此时topic和master在同一提交线上。   
+本质上，rebase是线性化的自动的 cherry-pick。
 <img class="shadow" width="450" src="/img/post/rebase.png" />
 
 merge当前分支和另一个分支以及他们的共同祖父节点进行一次三方合并，并且产生最新节点，提交历史不是线性的。被合并分支没有变化，当前所在分支最新版本是三方合并版本。
