@@ -189,7 +189,7 @@ div1和div4是处于正常文档流中的盒子，把div2、div4左浮动，效�
 - 未指定left/top/right/bottom的absolute元素，其在所处层级中的定位点就是正常文档流中该元素的定位点。
 - 用户给absolute元素指定了left/right，top/bottom
 	- left是指左外边距边界（margin-left）与其包含块左边界（border-left）之间的偏移（left：0元素的左上角和父元素的左上角重合）
-	-right是指右外边距边界（margin-right）与其包含块右边界（border-right）之间的偏移（right：0元素的右上角和父元素的右上角重合）
+	- right是指右外边距边界（margin-right）与其包含块右边界（border-right）之间的偏移（right：0元素的右上角和父元素的右上角重合）
 - absolute的left: 0;right: 0;top: 0;bottom: 0;来实现全屏拉伸。
 
 
