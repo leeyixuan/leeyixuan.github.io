@@ -113,7 +113,7 @@ getdata(num, current).then(function (data) {
 
 以下的规则只是在不另外为html元素和body元素指定width和height属性时生效：
 - window.innerWidth：
-`window.innerWidth = html.width + html.padding + 滚动条 + body.border`
+`window.innerWidth = html.width + html.padding + 滚动条 + html.border`
 `window.innerWidth = document.documentElement.offsetWidth `
 
 - $(window).width()：
