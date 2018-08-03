@@ -101,23 +101,23 @@ getdata(num, current).then(function (data) {
 
 
 **易混淆点**：document.documentElement.offsetWidth，document.body.offsetWidth，window.innerWidth，$(window).width()
->document.documentElement属性返回当前文档的根节点（root）。HTML网页的该属性，一般是`<html>`节点。
->document.body属性指向`<body>`节点。
+>document.documentElement属性返回当前文档的根节点（root）。HTML网页的该属性，一般是`<html>`节点。   
+>document.body属性指向`<body>`节点。    
+>所以，document.documentElement.offsetWidth/offsetHeigth是html元素的大小；document.body.offsetWidth/offsetHeigth是body元素的大小。
+- document.documentElement.offsetWidth：   
+`document.documentElement.offsetWidth = html.width + html.padding + 滚动条 + html.border`
 
-
-- document.documentElement.offsetWidth：`document.documentElement.offsetWidth = html.width + html.padding + 滚动条 + html.border`
-- document.body.offsetWidth：
+- document.body.offsetWidth：   
 `document.body.offsetWidth = body.width + body.padding + 滚动条 + body.border`     
+
+- document.body和document.documentElement两者之间的联系：  
 `document.body.offsetWidth = document.documentElement.scrollWidth`
 
 
-以下的规则只是在不另外为html元素和body元素指定width和height属性时生效：
-- window.innerWidth：
-`window.innerWidth = html.width + html.padding + 滚动条 + html.border`
+- window.innerWidth：    
 `window.innerWidth = document.documentElement.offsetWidth `
 
-- $(window).width()：
-`$(window).width() = html.width + html.padding`
+- $(window).width()：     
 `$(window).width() = document.documentElement.clientWidth `
 
 
@@ -126,23 +126,23 @@ getdata(num, current).then(function (data) {
  
  
 **总结**：
-1. window的outerHeight/outerWidth/innerHeight/innerWidth属性和浏览器的视窗（viewport）有关，一直都是固定的。另外，调节网页大小的时候innerHeight/innerWidth属性会随之变化。
-2. document.documentElement.offsetWidth/offsetHeigth是html元素的大小；   
-document.body.offsetWidth/offsetHeigth是body元素的大小；   
-window.innerWidth正在代表视窗viewport；   
-window.outerWidth在视窗的基础上还加上了一些工具栏的大小。
+  
 
-3. body节点的offsetWidth/offsetWidth就是实际页面的大小，不过被viewport限制了。从`document.body.offsetWidth = document.documentElement.scrollWidth`就可以看出来。
+1. window.innerWidth代表视觉视口（visual viewport），表示屏幕的可视区域的宽度；window.outerWidth在视窗的基础上还加上了一些工具栏的大小。调节网页大小的时候innerHeight/innerWidth属性会随之变化。
+
+2. 严格来讲，document.documentElement.offersetWidth 代表布局视口（layout viewport ）
+在忽略html元素滑动条和边框的情况下（一般情况下），document.documentElement.clientWidth 代表布局视口（layout viewport ）。
+
+3. 在桌面浏览器中，浏览器视觉视口约束布局视口。所以：
+严格来讲，`window.innerWidth = document.documentElement.clientWidth`。
+在忽略html元素滑动条和边框的情况下（一般情况下），`window.innerWidth = document.documentElement.clientWidth`。
 
 
-4. 获取屏幕的可视区域的宽度：`document.documentElement.clientWidth`或者`$(window).width`。
-
-5. 一般情况下，不会为html元素和body元素指定width和height属性，所以body和html的width和height都是100%（width和height的默认值是auto，而此时的padding、margin、border都没有设置，默认值是0，最后浏览器计算除auto的值是100%）
-在此基础上，可以得到以下结论：
-- window.innerWidth实际上也是HTML元素大小，等于document.documentElement.offsetWidth；
-- 视窗大小限制了document.documentElement.offsetWidth的大小；
-- 滑动条是来自HTML元素，实际滑动的是HTML盒子；
-- window的scrollY属性和documentElement.scrollTop属性都能获取页面滚动过的距离。
+4. 一般情况下，不会为body元素指定width/height属性和border属性，所以body元素的width和height都是100%（width和height的默认值是auto，而此时的padding、margin、border都没有设置，默认值是0，最后浏览器计算除auto的值是100%）
+在此基础上，可以得到以下结论：    
+`document.body.offsetWidth = document.documentElement.scrollWidth`body节点的offsetWidth/offsetWidth就是实际页面的大小，不过被viewport限制了。
+	
+5. window的scrollY属性和documentElement.scrollTop属性都能获取页面滚动过的距离。
 
 **兼容性问题**：
 1.  IE8以及以下不支持window.innerWidth/window.innerHeight。
