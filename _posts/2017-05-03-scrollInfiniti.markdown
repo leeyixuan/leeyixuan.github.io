@@ -138,7 +138,7 @@ window.outerWidth在视窗的基础上还加上了一些工具栏的大小。
 4. 获取屏幕的可视区域的宽度：`document.documentElement.clientWidth`或者`$(window).width`。
 
 5. 一般情况下，不会为html元素和body元素指定width和height属性，所以body和html的width和height都是100%（width和height的默认值是auto，而此时的padding、margin、border都没有设置，默认值是0，最后浏览器计算除auto的值是100%）
-再次基础上，可以得到以下结论：
+在此基础上，可以得到以下结论：
 - window.innerWidth实际上也是HTML元素大小，等于document.documentElement.offsetWidth；
 - 视窗大小限制了document.documentElement.offsetWidth的大小；
 - 滑动条是来自HTML元素，实际滑动的是HTML盒子；
