@@ -46,9 +46,9 @@ tags:
 3. Cache-Control的max-age描述的是一个相对时间，在进行缓存命中的时候，都是利用客户端时间进行判断。而Expires是服务器返回的一个绝对时间，具有时间差等问题。所以Cache-Control的缓存管理更有效，安全一些。
 4. Cache-Control的no-cache不是不进行缓存，只是强制浏览器进行对比缓存来验证，no-store才是禁止浏览器进行任何缓存。但是实际上禁止浏览器缓存不只是设置no-store就行，要考虑浏览器默认强缓存的情况，最好再将过期时间设为过去。
 5. Cache-Control没有设置private和public时，默认为public。（public允许共享缓存；private只允许本地浏览器进行缓存）
-5. Last-Modified和Etag是协商缓存时，服务器http响应头的字段，标识当前资源的版本。协商校验时，浏览器将资源的版本号填充到If-Modified-Since和If-Modified-Since字段中发送给服务器校验。
-6. Etag是HTTP1.1中规定的， Last-Modified是HTTP1.0中规定的。Etag优先级更高，这两个Header可以只用其一，也可以一起使用。一起使用时先进行 Etag的校验，通过之后再进行Last-Modified的校验。
-7. Last-Modified是基于文件修改的时间（秒）。Etag是基于文件的内容生成的哈希指纹，能够准确地标识当前文件的唯一性，弥补Last-Modified无法识别快速多次修改文件和文件内容没有改动却变更标识的问题。但是Etag也具有哈希冲突的问题。这两者结合使用效果更佳。
+6. Last-Modified和Etag是协商缓存时，服务器http响应头的字段，标识当前资源的版本。协商校验时，浏览器将资源的版本号填充到If-Modified-Since和If-None-Match字段中发送给服务器校验。
+7. Etag是HTTP1.1中规定的， Last-Modified是HTTP1.0中规定的。Etag优先级更高，这两个Header可以只用其一，也可以一起使用。一起使用时先进行 Etag的校验，通过之后再进行Last-Modified的校验。
+8. Last-Modified是基于文件修改的时间（秒）。Etag是基于文件的内容生成的哈希指纹，能够准确地标识当前文件的唯一性，弥补Last-Modified无法识别快速多次修改文件和文件内容没有改动却变更标识的问题。但是Etag也具有哈希冲突的问题。这两者结合使用效果更佳。
 
 
 ## 设置浏览器缓存的方式——meta
