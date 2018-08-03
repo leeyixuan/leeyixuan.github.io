@@ -127,9 +127,9 @@ getdata(num, current).then(function (data) {
  
 **总结**：
 1. window的outerHeight/outerWidth/innerHeight/innerWidth属性和浏览器的视窗（viewport）有关，一直都是固定的。另外，调节网页大小的时候innerHeight/innerWidth属性会随之变化。
-2. document.documentElement.offsetWidth/offsetHeigth是html元素的大小；
-document.body.offsetWidth/offsetHeigth是body元素的大小；
-window.innerWidth正在代表视窗viewport；
+2. document.documentElement.offsetWidth/offsetHeigth是html元素的大小；   
+document.body.offsetWidth/offsetHeigth是body元素的大小；   
+window.innerWidth正在代表视窗viewport；   
 window.outerWidth在视窗的基础上还加上了一些工具栏的大小。
 
 3. body节点的offsetWidth/offsetWidth就是实际页面的大小，不过被viewport限制了。从`document.body.offsetWidth = document.documentElement.scrollWidth`就可以看出来。
