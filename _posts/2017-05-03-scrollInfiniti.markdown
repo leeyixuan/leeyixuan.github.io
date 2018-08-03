@@ -101,8 +101,7 @@ getdata(num, current).then(function (data) {
 
 
 **易混淆点**：document.documentElement.offsetWidth，document.body.offsetWidth，window.innerWidth，$(window).width()
->document.documentElement属性返回当前文档的根节点（root）。HTML网页的该属性，一般是`<html>`节点。   
->document.body属性指向`<body>`节点。    
+>document.documentElement属性返回当前文档的根节点（root）。HTML网页的该属性，一般是`<html>`节点。document.body属性指向`<body>`节点。    
 >所以，document.documentElement.offsetWidth/offsetHeigth是html元素的大小；document.body.offsetWidth/offsetHeigth是body元素的大小。
 
 - document.documentElement.offsetWidth：   
@@ -132,17 +131,16 @@ getdata(num, current).then(function (data) {
 1.window.innerWidth代表视觉视口（visual viewport），表示屏幕的可视区域的宽度；window.outerWidth在视窗的基础上还加上了一些工具栏的大小。调节网页大小的时候innerHeight/innerWidth属性会随之变化。
 
 2.严格来讲，document.documentElement.offersetWidth 代表布局视口（layout viewport ）。           
-在忽略html元素滑动条和边框的情况下（一般情况下），document.documentElement.clientWidth 代表布局视口（layout viewport ）。
+一般情况下(忽略html元素滑动条和边框的情况)，document.documentElement.clientWidth 代表布局视口。
 
-3.在桌面浏览器中，浏览器视觉视口约束布局视口。所以：     
+3.在桌面浏览器中，浏览器视觉视口约束布局视口。   
+所以：     
+严格来讲，`window.innerWidth = document.documentElement.clientWidth`。                 
+一般情况下(忽略html元素滑动条和边框的情况)，`window.innerWidth = document.documentElement.clientWidth`。  
 
-严格来讲，`window.innerWidth = document.documentElement.clientWidth`。              
-在忽略html元素滑动条和边框的情况下（一般情况下），`window.innerWidth = document.documentElement.clientWidth`。
 
-
-4.一般情况下，不会为body元素指定width/height属性和border属性，所以body元素的width和height都是100%（width和height的默认值是auto，而此时的padding、margin、border都没有设置，默认值是0，最后浏览器计算除auto的值是100%）
+4.一般情况下，不会为body元素指定width/height属性和border属性，所以body元素的width和height都是100%（width和height的默认值是auto，而此时的padding、margin、border都没有设置，默认值是0，最后浏览器计算除auto的值是100%）     
 在此基础上，可以得到以下结论：    
-
 `document.body.offsetWidth = document.documentElement.scrollWidth`     
 body节点的offsetWidth/offsetWidth就是实际页面的大小，不过被viewport限制了。
 	
