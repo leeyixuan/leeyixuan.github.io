@@ -129,24 +129,24 @@ getdata(num, current).then(function (data) {
 **总结**：
   
 
-1. window.innerWidth代表视觉视口（visual viewport），表示屏幕的可视区域的宽度；window.outerWidth在视窗的基础上还加上了一些工具栏的大小。调节网页大小的时候innerHeight/innerWidth属性会随之变化。
+1.window.innerWidth代表视觉视口（visual viewport），表示屏幕的可视区域的宽度；window.outerWidth在视窗的基础上还加上了一些工具栏的大小。调节网页大小的时候innerHeight/innerWidth属性会随之变化。
 
-2. 严格来讲，document.documentElement.offersetWidth 代表布局视口（layout viewport ）。           
+2.严格来讲，document.documentElement.offersetWidth 代表布局视口（layout viewport ）。           
 在忽略html元素滑动条和边框的情况下（一般情况下），document.documentElement.clientWidth 代表布局视口（layout viewport ）。
 
-3. 在桌面浏览器中，浏览器视觉视口约束布局视口。所以：     
+3.在桌面浏览器中，浏览器视觉视口约束布局视口。所以：     
 
 严格来讲，`window.innerWidth = document.documentElement.clientWidth`。              
 在忽略html元素滑动条和边框的情况下（一般情况下），`window.innerWidth = document.documentElement.clientWidth`。
 
 
-4. 一般情况下，不会为body元素指定width/height属性和border属性，所以body元素的width和height都是100%（width和height的默认值是auto，而此时的padding、margin、border都没有设置，默认值是0，最后浏览器计算除auto的值是100%）
+4.一般情况下，不会为body元素指定width/height属性和border属性，所以body元素的width和height都是100%（width和height的默认值是auto，而此时的padding、margin、border都没有设置，默认值是0，最后浏览器计算除auto的值是100%）
 在此基础上，可以得到以下结论：    
 
 `document.body.offsetWidth = document.documentElement.scrollWidth`     
 body节点的offsetWidth/offsetWidth就是实际页面的大小，不过被viewport限制了。
 	
-5. window的scrollY属性和documentElement.scrollTop属性都能获取页面滚动过的距离。
+5.window的scrollY属性和documentElement.scrollTop属性都能获取页面滚动过的距离。
 
 **兼容性问题**：
 1.  IE8以及以下不支持window.innerWidth/window.innerHeight。
