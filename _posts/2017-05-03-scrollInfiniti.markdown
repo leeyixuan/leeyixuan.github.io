@@ -104,6 +104,7 @@ getdata(num, current).then(function (data) {
 >document.documentElement属性返回当前文档的根节点（root）。HTML网页的该属性，一般是`<html>`节点。   
 >document.body属性指向`<body>`节点。    
 >所以，document.documentElement.offsetWidth/offsetHeigth是html元素的大小；document.body.offsetWidth/offsetHeigth是body元素的大小。
+
 - document.documentElement.offsetWidth：   
 `document.documentElement.offsetWidth = html.width + html.padding + 滚动条 + html.border`
 
