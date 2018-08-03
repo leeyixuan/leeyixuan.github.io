@@ -118,3 +118,4 @@ z-index 属性是用来设置元素的堆叠顺序。
 
 1. [What You May Not Know About the Z-Index Property](https://webdesign.tutsplus.com/articles/what-you-may-not-know-about-the-z-index-property--webdesign-16892?ec_unit=translation-info-language)
 2. [浅析CSS——元素重叠及position定位的z-index顺序](http://www.cnblogs.com/mind/archive/2012/04/01/2198995.html)
+3. [深入理解CSS中的层叠上下文和层叠顺序](https://www.zhangxinxu.com/wordpress/2016/01/understand-css-stacking-context-order-z-index/)

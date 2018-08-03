@@ -2,7 +2,7 @@
 layout:     post
 title:      "实现滚动无限加载效果"
 subtitle:   "sroll爬坑之旅"
-date:       2017-5-22
+date:       2017-5-3
 author:     "leeyixuan"
 header-img: "img/background/post-bg-git.jpg"
 tags:
@@ -107,8 +107,8 @@ getdata(num, current).then(function (data) {
 
 - document.documentElement.offsetWidth：`document.documentElement.offsetWidth = html.width + html.padding + 滚动条 + html.border`
 - document.body.offsetWidth：
-`document.body.offsetWidth = body.width + body.padding + 滚动条 + body.border`
-`document.body.offsetWidth = document.documentElement.scrollHeight`
+`document.body.offsetWidth = body.width + body.padding + 滚动条 + body.border`     
+`document.body.offsetWidth = document.documentElement.scrollWidth`
 
 
 以下的规则只是在不另外为html元素和body元素指定width和height属性时生效：
