@@ -133,7 +133,7 @@ getdata(num, current).then(function (data) {
 2.严格来讲，document.documentElement.offersetWidth 代表布局视口（layout viewport ）。           
 一般情况下(忽略html元素滑动条和边框的情况)，document.documentElement.clientWidth 也代表布局视口。
 
-3.在桌面浏览器中，浏览器视觉视口约束布局视口。所以：    
+3.window窗口是html的包含块，html是body的包含块。浏览器视觉视口约束布局视口。所以：    
      
 严格来讲，`window.innerWidth = document.documentElement.offsetWidth`。                 
 一般情况下(忽略html元素滑动条和边框的情况)，`window.innerWidth = document.documentElement.clientWidth`。  
@@ -144,14 +144,12 @@ getdata(num, current).then(function (data) {
 `document.body.offsetWidth = document.documentElement.scrollWidth`     
 body节点的offsetWidth/offsetHeight就是实际页面的大小，不过被viewport限制了。
 	
-5.window窗口是html的包含块，html是body的包含块。
-- window.innerWidth类似于window元素的clientWidth；window.outerWidth类似于window元素的offsetWidth
-- scrollWidth/scrollHeight可以获得子元素的clientWidth/clientHeight
+5.window.innerWidth类似于window元素的clientWidth；window.outerWidth类似于window元素的offsetWidth。
+
+6.scrollWidth/scrollHeight可以获得子元素的clientWidth/clientHeight。
 
 
-
-
-6.window的scrollY属性和documentElement.scrollTop属性都能获取页面滚动过的距离。
+7.window的scrollY属性和documentElement.scrollTop属性都能获取页面滚动过的距离。
 
 **兼容性问题**：
 1.  IE8以及以下不支持window.innerWidth/window.innerHeight。
