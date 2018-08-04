@@ -135,16 +135,23 @@ getdata(num, current).then(function (data) {
 
 3.在桌面浏览器中，浏览器视觉视口约束布局视口。所以：    
      
-严格来讲，`window.innerWidth = document.documentElement.clientWidth`。                 
+严格来讲，`window.innerWidth = document.documentElement.offsetWidth`。                 
 一般情况下(忽略html元素滑动条和边框的情况)，`window.innerWidth = document.documentElement.clientWidth`。  
 
 
 4.一般情况下，不会为body元素指定width/height属性和border属性，所以body元素的width和height都是100%（width和height的默认值是auto，而此时的padding、margin、border都没有设置，默认值是0，最后浏览器计算除auto的值是100%）在此基础上，可以得到以下结论：
         
 `document.body.offsetWidth = document.documentElement.scrollWidth`     
-body节点的offsetWidth/offsetWidth就是实际页面的大小，不过被viewport限制了。
+body节点的offsetWidth/offsetHeight就是实际页面的大小，不过被viewport限制了。
 	
-5.window的scrollY属性和documentElement.scrollTop属性都能获取页面滚动过的距离。
+5.window窗口是html的包含块，html是body的包含块。
+- window.innerWidth类似于window元素的clientWidth；window.outerWidth类似于window元素的offsetWidth
+- scrollWidth/scrollHeight可以获得子元素的clientWidth/clientHeight
+
+
+
+
+6.window的scrollY属性和documentElement.scrollTop属性都能获取页面滚动过的距离。
 
 **兼容性问题**：
 1.  IE8以及以下不支持window.innerWidth/window.innerHeight。
