@@ -1,0 +1,95 @@
+---
+layout:     post
+title:      "viewport"
+subtitle:   ""
+date:       2018-7-11
+author:     "leeyixuan"
+header-img: "img/background/post-bg-git.jpg"
+tags:
+    - 移动端适配方案
+---
+
+
+## 关于像素
+1.CSS像素和设备的物理像素是两个概念。
+
+
+- 任何设备屏幕的物理像素的数量都是固定不变的。
+屏幕像素密度（Pibel Per Inch），简称 ppi ，单位是 dpi（dot per inch）。他用来描述屏幕水平或垂直每英寸有多少个物理像素。
+
+- CSS像素也可以称为设备独立像素（device-independent pixels），简称为dips，单位是dp。他用来描述视觉视口的尺寸。我们经常使用的css相对单位PX所指的1像素就是1dp。
+
+
+
+2.我们经常用于媒体查询的设备像素比（devicePixelRatio），简称dpr，就描述ppi和dip的关系。
+-  `dpr= ppi / dips`
+- 通过`window.devicePixelRatio`可以获取dpr，也可以重写dpr。
+
+
+3.设备屏幕的物理像素一定，设备像素比dpr一定，就可以确定dip。
+
+
+## 视觉视口
+
+视觉视口（visual viewport），表示屏幕的可视区域的宽度，即window对象的大小。
+
+<img class="shadow" width="450" src="https://www.github.com/CoolRabbit520/photos/raw/master/小书匠/1533367402513.png" />
+
+window.innerWidth代表视觉视口。     
+window.outerWidth在视觉视口的基础上还加上了一些工具栏的大小。
+
+<img class="shadow" width="450" src="https://www.github.com/CoolRabbit520/photos/raw/master/小书匠/1531222115657.png" />
+
+注意：视觉视口的尺寸实际上取决于dpi。dip定义了视觉视口的尺寸。
+
+
+
+
+## 布局视口
+布局视口（layout viewport ）  ，表示浏览器展示的文档的实际大小，即HTML元素的大小。  
+
+<img class="shadow" width="450" src="https://www.github.com/CoolRabbit520/photos/raw/master/小书匠/1533367402510.png" />
+
+
+
+
+严格来讲，document.documentElement.offersetWidth 代表布局视口（layout viewport ）。      
+一般情况下(忽略html元素滑动条和边框的情况)，document.documentElement.clientWidth 也代表布局视口。
+<img class="shadow" width="450" src="https://www.github.com/CoolRabbit520/photos/raw/master/小书匠/1531222115532.png" />
+<img class="shadow" width="450" src="https://www.github.com/CoolRabbit520/photos/raw/master/小书匠/1531222115537.png" />
+
+screen.width/height返回布局视口的尺寸。
+> 在iOS设备，screen.width等于设备独立像素值（dpi）。    
+在Android以及Windows Phone设备，screen.width等于物理像素值（ppi）。
+
+
+## 视觉视口和布局视口的关系
+window窗口可以视作是html的包含块。
+**浏览器视觉视口约束布局视口**。
+
+所以：    
+     
+- 严格来讲，`window.innerWidth = document.documentElement.offsetWidth`。                 
+- 一般情况下(忽略html元素滑动条和边框的情况)，`window.innerWidth = document.documentElement.clientWidth`。
+
+
+## 移动端理想视口
+因为移动端的屏幕较小，即视觉视口较小，用户经常需要进行页面缩放，因此提出了理想视口的概念。
+
+理想视口重写了布局视口的大小。理想视口可以看做是最佳布局视口。     
+注意：这里不是约束，而是重写。约束会产生overflow，重写是重新定义大小。
+
+理想视口一般等于当前浏览器的是视觉视口。
+
+可以通过`<meta name="viewport" content="width=这里填写尺寸">`人为设置理想视口的尺寸。
+>一般这样设置告诉浏览器使用它的理想视口：     
+`<meta name="viewport" content="width=device-width,initial-scale=1">`    
+即理想视口尺寸(当前布局视口尺寸)等于当前浏览器的是视觉视口。
+
+
+
+
+## reference
+1. [移动端适配方案(上) ](https://github.com/riskers/blog/issues/17)
+2. [设备像素比devicePixelRatio简单介绍](https://www.zhangxinxu.com/wordpress/2012/08/window-devicepixelratio/)
+3. [Window.devicePixelRatio ](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/devicePixelRatio)
