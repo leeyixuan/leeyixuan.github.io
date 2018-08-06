@@ -27,7 +27,7 @@ tags:
 - 通过`window.devicePixelRatio`可以获取dpr，也可以重写dpr。
 
 
-3.`screen.width`：浏览器窗口所在的屏幕的宽度，单位：dp(CSS像素)。    
+3.`screen.width`：浏览器窗口所在的屏幕的宽度。    
 除非调整显示器的分辨率，否则这个值可以看作常量，不会发生变化。显示器的分辨率与浏览器设置无关，缩放网页并不会改变分辨率。     
   > 在iOS设备，screen.width等于设备独立像素值（dpi）。    
   在Android以及Windows Phone设备，screen.width等于物理像素值（ppi）。
@@ -36,7 +36,7 @@ tags:
 
 其实，设备物理像素与CSS像素的关系取决于两个条件:
 
-1. 页面是否缩放。screen.width为320px的屏幕放下640px的页面，就是通过缩小页面，1个CSS像素下的2个设备物理像素实际承载页面2个CSS像素。
+1. 页面是否缩放。screen.width为320px的屏幕放下640px的页面，就是通过缩小页面，原来用于承载1个CSS像素的设备物理像素现在承载2个CSS像素。
 
 2. 屏幕是否为高密度。之前提到的dpr就是用来衡量屏幕是否为高密度的物理量。
 
@@ -74,10 +74,6 @@ window.outerWidth在视觉视口的基础上还加上了一些工具栏的大小
 ## 视觉视口和布局视口的关系
 window窗口可以视作是html的包含块。**浏览器视觉视口约束布局视口**。
 
-- 布局视口的宽度始终大于等于视觉视口的宽度。
-- 通过 `<meta name="viewport" content="initial-scale=x">` 可以直接设置视觉视口的缩放。视觉视口的宽度为 `screen.width / initial-scale`。
-- 如果不设置 `initial-scale` ，iOS设备会自动将视觉视口缩放到布局视口一样大。
-- 默认情况下布局视口为 980px。
 
 所以：    
      
@@ -90,7 +86,22 @@ window窗口可以视作是html的包含块。**浏览器视觉视口约束布�
 ## 移动端的理想视口
 因为移动端的屏幕较小，屏幕可以视作浏览器window窗口的包含块。**屏幕尺寸（screen.width）约束浏览器视觉视口**。
 
-可以通过设置meta元素的`width`和`initial-scale`字段来进行移动端视口的适配，提出了理想视口的概念：
+通过设置meta元素的`width`和`initial-scale`字段来进行移动端视口的适配：
+
+1.`initial-scale`控制缩放。—— 屏幕尺寸约束浏览器视觉视口。
+
+- ` window.innerWidth = screen.width / initial-scale`，定义视觉视口大小。
+- 假设浏览器网页的布局视口使用 640px，那么`initial-scale=0.5`会把页面缩放成50%，这是绝对的等比例缩放。
+- 一个没有为移动端做优化的网页：不设置 `initial-scale` ，会自动将视觉视口缩放到布局视口一样大，让用户看到所有东西。
+- 浏览器厂商为了让用户在小屏幕下网页也能够显示地很好，所以把布局视口宽度设置地很大，一般在 768px ~ 1024px 之间，最常见的宽度是 980px。
+
+
+2.`width`定义布局视口的大小。—— 浏览器视觉视口约束布局视口。
+
+
+
+
+理想视口的概念：
 
 `<meta name="viewport" content="width=device-width,initial-scale=1">`    
 
@@ -99,9 +110,7 @@ window窗口可以视作是html的包含块。**浏览器视觉视口约束布�
 - 如果只设置布局视口和视觉视口中的一个，那么另一个也是同样的宽度。
 
 
->一方面，`initial-scale`控制缩放，` window.innerWidth = screen.width / initial-scale`，定义视觉视口大小。——屏幕尺寸约束浏览器视觉视口。
-`initial-scale=0.5`，即浏览器网页的布局视口使用 640px，然后把页面缩放成50%，这是绝对的等比例缩放。
->另一方面，`width`定义布局视口的大小。——浏览器视觉视口约束布局视口。
+
 
 
 
@@ -112,6 +121,7 @@ window窗口可以视作是html的包含块。**浏览器视觉视口约束布�
 
 
 ## Reference
-1. [移动端适配方案(上) ](https://github.com/riskers/blog/issues/17)
+1. [移动端适配方案(上) ](https://github.com/riskers/blog/issues/18)
 2. [设备像素比devicePixelRatio简单介绍](https://www.zhangxinxu.com/wordpress/2012/08/window-devicepixelratio/)
 3. [Window.devicePixelRatio ](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/devicePixelRatio)
+4. [走向视网膜（Retina）的Web时代](http://www.w3cplus.com/css/towards-retina-web.html)
