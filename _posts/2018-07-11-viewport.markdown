@@ -14,8 +14,8 @@ tags:
 1.CSS像素和设备的物理像素是两个概念。
 
 
-- 屏幕像素密度（Pibel Per Inch），简称ppi ，单位是dpi。    
-他用来描述屏幕水平或垂直每英寸有多少个物理像素。任何设备屏幕的物理像素的数量都是固定不变的。
+- 设备的物理像素是固定不变的，没有单位，用来描述整个屏幕共有多少个可以用来呈像的像素点。
+屏幕像素密度（Pibel Per Inch），简称ppi ，单位是dpi。他是一个物理像素密度单位，描述了屏幕水平或垂直每英寸有多少个物理像素。
 
 - CSS像素也可以称为设备独立像素（device-independent pixels），简称为dips，单位是dp。    
 他用来描述视觉视口的尺寸。我们经常使用的css相对单位PX所指的1像素就是1dp。
@@ -32,6 +32,13 @@ tags:
   > 在iOS设备，screen.width等于设备独立像素值（dpi）。    
   在Android以及Windows Phone设备，screen.width等于物理像素值（ppi）。
 
+
+
+其实，设备物理像素与CSS像素的关系取决于两个条件:
+
+1. 页面是否缩放。screen.width为320px的屏幕放下640px的页面，就是通过缩小页面，1个CSS像素下的2个设备物理像素实际承载页面2个CSS像素。
+
+2. 屏幕是否为高密度。之前提到的dpr就是用来衡量屏幕是否为高密度的物理量。
 
 ## 视觉视口
 
@@ -67,16 +74,23 @@ window.outerWidth在视觉视口的基础上还加上了一些工具栏的大小
 ## 视觉视口和布局视口的关系
 window窗口可以视作是html的包含块。**浏览器视觉视口约束布局视口**。
 
+- 布局视口的宽度始终大于等于视觉视口的宽度。
+- 通过 `<meta name="viewport" content="initial-scale=x">` 可以直接设置视觉视口的缩放。视觉视口的宽度为 `screen.width / initial-scale`。
+- 如果不设置 `initial-scale` ，iOS设备会自动将视觉视口缩放到布局视口一样大。
+- 默认情况下布局视口为 980px。
+
 所以：    
      
 - 严格来讲，`window.innerWidth = document.documentElement.offsetWidth`。                 
 - 一般情况下(忽略html元素滑动条和边框的情况)，`window.innerWidth = document.documentElement.clientWidth`。
 
 
+
+
 ## 移动端的理想视口
 因为移动端的屏幕较小，屏幕可以视作浏览器window窗口的包含块。**屏幕尺寸（screen.width）约束浏览器视觉视口**。
 
-可以通过设置meta元素的`width`和`initial-scale`字段来进行移动端是口的适配，提出了理想视口的概念：
+可以通过设置meta元素的`width`和`initial-scale`字段来进行移动端视口的适配，提出了理想视口的概念：
 
 `<meta name="viewport" content="width=device-width,initial-scale=1">`    
 
@@ -85,8 +99,9 @@ window窗口可以视作是html的包含块。**浏览器视觉视口约束布�
 - 如果只设置布局视口和视觉视口中的一个，那么另一个也是同样的宽度。
 
 
->一方面，`initial-scale`字段控制缩放，` window.innerWidth = screen.width / initial-scale`，定义视觉视口大小。——屏幕尺寸约束浏览器视觉视口。     
->另一方面，`width`字段定义布局视口的大小。——浏览器视觉视口约束布局视口。
+>一方面，`initial-scale`控制缩放，` window.innerWidth = screen.width / initial-scale`，定义视觉视口大小。——屏幕尺寸约束浏览器视觉视口。
+`initial-scale=0.5`，即浏览器网页的布局视口使用 640px，然后把页面缩放成50%，这是绝对的等比例缩放。
+>另一方面，`width`定义布局视口的大小。——浏览器视觉视口约束布局视口。
 
 
 
@@ -96,7 +111,7 @@ window窗口可以视作是html的包含块。**浏览器视觉视口约束布�
 
 
 
-## reference
+## Reference
 1. [移动端适配方案(上) ](https://github.com/riskers/blog/issues/17)
 2. [设备像素比devicePixelRatio简单介绍](https://www.zhangxinxu.com/wordpress/2012/08/window-devicepixelratio/)
 3. [Window.devicePixelRatio ](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/devicePixelRatio)
