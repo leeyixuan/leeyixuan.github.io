@@ -1,0 +1,203 @@
+---
+layout:     post
+title:      "移动端适配方案"
+subtitle:   ""
+date:       2018-8-6
+author:     "leeyixuan"
+header-img: "img/background/post-bg-git.jpg"
+tags:
+    - 移动端适配方案
+---
+
+
+
+## 移动端有哪些问题？
+移动端屏幕尺寸小，屏幕像素密度变高，并且不同手机型号的的屏幕尺寸不同。这三大差异使得移动端产生以下问题：
+
+- 位图模糊
+- 为了塞进手机屏幕，页面整体缩放
+- 多屏适配
+- 1px边框问题
+- rem方案下点阵文字会有锯齿模糊
+
+为了解决这些问题，产生了下面这些移动端适配方案：
+
+## 1. 完美视口——避免页面整体缩放
+
+因为移动端的屏幕较小，即视觉视口较小，用户经常需要进行页面缩放，因此提出了理想视口的概念。
+
+`<meta name="viewport" content="width=device-width,initial-scale=1">`
+
+即理想视口尺寸(当前布局视口尺寸)等于当前浏览器的是视觉视口。
+
+>相关细节可见我之前写过的文章：   
+[《viewport》](https://leeyixuan.github.io/2018/07/11/viewport/)
+
+
+
+## 2. rem——自适应布局，多屏适配
+
+### 1.为什么使用rem单位？
+
+
+应当选取参照物是屏幕尺寸的相对单位，这样就排除了vw/vh，百分比和em，只剩下rem。
+rem就是相对于根元素html的font-size来做计算。
+
+
+>百分比是相对于父元素的尺寸，不行。
+>em是相对于元素自身font-size，也不行。
+
+
+>本来最合适的相对单位是vw/vh，它的含义是视口宽度，但是这个单位存在严重的兼容问题，所以也只好放弃。
+
+
+
+
+
+### 2.html的font-size到底是多少才合适？
+- 和视觉视口线性相关
+- 因为不易过大（小数点会被四舍五入，太大容易失真）
+
+由于我们使用375px的UI设计稿，所以为了便于计算font-size=375px/7.5=50px
+>UI设计稿选择iPhone6作为基准设计尺寸，使用sketch导出标注图，标注单位为rem(相对于html的font-size为50px)。
+
+
+### 3.如何设置html的font-size？
+① 利用js来动态设置，调整窗口时重置font-size
+```javascript
+(window.onresize = function() {
+	var clientWidth = document.documentElement.clientWidth < 500 ? document.documentElement.clientWidth : 500;
+	document.documentElement.style.fontSize = clientWidth / 7.5 + 'px';
+})()
+
+```
+
+② 用媒体查询来设置html的font-size
+```css
+@media screen and (min-width: 320px) {
+    html {font-size: 14px;}
+}
+ 
+@media screen and (min-width: 360px) {
+    html {font-size: 16px;}
+}
+ 
+@media screen and (min-width: 400px) {
+    html {font-size: 18px;}
+}
+ 
+@media screen and (min-width: 440px) {
+    html {font-size: 20px;}
+}
+ 
+@media screen and (min-width: 480px) {
+    html {font-size: 22px;}
+}
+ 
+@media screen and (min-width: 640px) {
+    html {font-size: 28px;}
+}
+
+```
+
+
+
+
+
+### 4.每个rem计算值怎么算的？
+第一类方法：在css中使用rem单位
+
+① UI设计师使用sketch导出375px的标注图，标注单位为rem(html的font-size为50px)。
+
+
+② 直接心算，将375px设计稿上的px值除以50。
+
+③ 使用sublime插件——PostCSS，自动完成CSS的px值转rem值。
+
+
+第二类方法：还是在css中使用px单位，后期在sass编译或者是gulp任务时自动完成px转rem
+
+④ 使用gulp插件——px2rem，在插件内部定义html的font-size。
+
+⑤ 使用sass自定义函数。
+```
+@function px2em($px, $base-font-size: 16px) {
+    @if (unitless($px)) {
+        @warn "Assuming #{$px} to be in pixels, attempting to convert it into pixels for you";
+        @return px2em($px + 0px); // That may fail.
+    } @else if (unit($px) == em) {
+        @return $px;
+    }
+    @return ($px / $base-font-size) * 1em;
+}
+```
+
+### 5.rem方案的缺点
+- 某些Android机型会丢掉rem小数部分
+- 占用了rem单位
+- 不是纯css方案
+- 性能问题，html 的font调整会带来一次重排
+
+
+## 3. 字体使用px——视觉上统一文字大小
+
+文本字号不建议使用rem。现在绝大多数的字体文件都自带一些点阵尺寸，通常是16px和24px。在不同的屏幕下会产生一些其他的字号，所以我们不希望出现13px和15px这样的奇葩尺寸。
+
+① 如果没有使用**完美视口**，在高分辨率屏幕下，文字会变得很小，为了保持在不同ppi的手机屏幕上仍有统一的文字大小，用户阅读文字时不费力，会用媒体查询为不同dpr屏幕分别设置px字号。
+```css
+div {
+    width: 1rem; 
+    height: 0.4rem;
+    font-size: 12px; // 默认写上dpr为1的fontSize
+}
+@media (-webkit-min-device-pixel-ratio: 2),(min-device-pixel-ratio: 2)  {
+	div {
+    	font-size: 24px;
+	}
+}
+@media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3) {
+	div {
+		font-size: 36px;
+	}
+}
+```
+
+② 使用**完美视口**，没有这么多担心，直接指定px。
+
+## 4. 2X图和3X图——位图不模糊
+用css选择图片进行加载： css媒体查询dpr，修改图片的src。
+
+step1.通过mixin,动态修改图标的背景图片。通过@media (媒体查询)，判断设备的dpr。
+
+```css
+@mixin bg-image($url) {
+    background-image: url($url + "@2x.png");
+    @media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3) {
+        background-image: url($url + "@3x.png");
+    }
+}
+```
+step 2.css样式中调用 bg-image 方法
+```css 
+div{
+  width:30px;
+  height:20px;
+  background-size:30px  20px;
+  background-repeat:no-repeat;
+  @include bg-image('special_1');     
+}
+```
+其他方案可见：[《高dpi图片对于不同设备的适配方案》](https://yalishizhude.github.io/2017/02/16/dpi-images/)
+
+## refence
+1. [走向视网膜（Retina）的Web时代](http://www.w3cplus.com/css/towards-retina-web.html)
+2.  [移动端适配方案(下) ](https://github.com/riskers/blog/issues/17)
+3.  [使用Flexible实现手淘H5页面的终端适配 ](https://github.com/amfe/article/issues/17)
+
+
+
+
+
+
+
+
