@@ -148,7 +148,7 @@ rem就是相对于根元素html的font-size来做计算。
 div {
     width: 1rem; 
     height: 0.4rem;
-    font-size: 12px; // 默认写上dpr为1的fontSize
+    font-size: 12px; /*默认写上dpr为1的fontSize */
 }
 @media (-webkit-min-device-pixel-ratio: 2),(min-device-pixel-ratio: 2)  {
 	div {

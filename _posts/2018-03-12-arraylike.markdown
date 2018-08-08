@@ -12,7 +12,7 @@ tags:
 ## 类数组对象
 JavaScript 类数组对象的定义：**可以通过索引访问元素，并且拥有 length 属性。**
 
-```
+```javascript
 var foo = {
     0: 'Java',
     1: 'Python',
@@ -62,7 +62,7 @@ HTMLCollection还有一个nameItem()方法，可以返回集合中name属性和i
 
 ## 类数组转换成数组
 
-```
+```javascript
 var arrayLike = {0: 'name', 1: 'age', 2: 'sex', length: 3 }
 // 1. slice
 Array.prototype.slice.call(arrayLike); // ["name", "age", "sex"] 
@@ -78,7 +78,7 @@ Array.prototype.concat.apply([], arrayLike)
 类数组不转成数组，利用call，直接借用array的方法。
 
 
-```
+```javascript
 var arrayLike = {0: 'name', 1: 'age', 2: 'sex', length: 3 }
 
 Array.prototype.join.call(arrayLike, '&'); // name&age&sex
@@ -93,7 +93,7 @@ Array.prototype.map.call(arrayLike, function(item){
 ```
 ## 为类数组对象添加方法
 Array.prototype 上的方法添加到 NodeList.prototype 上。
-```
+```javascript
 var arrayMethods = Object.getOwnPropertyNames( Array.prototype );
 
 
@@ -115,7 +115,7 @@ firstDiv.childNodes.forEach(function( divChild ){
 ```
 ## ES6的 ... 运算符
 将arguments转成数组
-```
+```javascript
 function func(...arguments) {
     console.log(arguments); // [1, 2, 3]
 }
