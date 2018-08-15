@@ -1,0 +1,195 @@
+---
+layout:     post
+title:      "浮点数误差处理"
+subtitle:   ""
+date:       2018-4-11
+author:     "leeyixuan"
+header-img: "img/background/post-bg-js.jpg"
+tags:
+    - js
+---
+
+
+## Number类型的存储
+Number类型使用IEEE754来标识整数和浮点数。但其实，JavaScript 语言的底层根本没有整数，所有数字都是浮点数，使用 64 位固定长度来表示。
+
+64位比特又可分为三个部分：
+
+<img class="shadow" width="450" src="https://www.github.com/CoolRabbit520/photos/raw/master/小书匠/1534319391946.png" />
+
+- 符号位S：第 1 位是正负数符号位（sign），0代表正数，1代表负数
+- 指数位E：中间的 11 位存储指数（exponent），用来表示次方数
+- 尾数位M：最后的 52 位是尾数（mantissa），超出的部分自动进一舍零
+
+公式：`V = (-1)^S * 2^E * M`
+
+
+详细解释：
+1. E是一个无符号整数，因为长度是11位，取值范围是 0~2047。但是科学计数法中的指数是可以为负数的，所以再减去一个中间数 1023，[0,1022]表示为负，[1024,2047] 表示为正。
+2. 如果指数部分的值在0到2047之间（不含两个端点），那么有效数字的整数部分默认总是1，被舍去，只保留后面的小数部分。
+
+综上，公式变为：`V = (-1)^S * 2^(E-1023) * (M+1)`
+
+举例：`0.1`存储    
+step1. `0.1` 转成二进制表示为` 0.0001 1001 1001 1001`(1001循环)     
+step2. 正数，所以S=0   
+step3. 第一个不为0的数字在千分为上，此时`0.1`表示为`1.100110011001100x2^-4`，所以E=-4+1023   
+step4. 有效数字舍去首位的1，M=10011001...    
+最终，`0.1`的存储形式为：
+
+<img class="shadow" width="450" src="https://www.github.com/CoolRabbit520/photos/raw/master/小书匠/1534319392122.png" />
+
+
+`0.1`转化成十进制后为`0.100000000000000005551115123126`，出现了浮点误差。
+
+## 精度问题
+
+精度最多只能到53（加上被省略的1位整数）个二进制位。这意味着，绝对值小于等于2的53次方的整数，即-2^53 到2^53，都可以精确表示。
+
+>由于2的53次方是一个16位的十进制数值，所以简单的法则就是，JavaScript 对15位的十进制数都可以精确处理。
+
+
+超过这个范围的数字仍然可以被存储，不会被转为Infinite，不过无法保持精度。大于2的53次方以后，多出来的有效数字都会无法保存，末尾的有效数字变成0。
+
+<img class="shadow" width="450" src="https://www.github.com/CoolRabbit520/photos/raw/master/小书匠/1534319392144.png" />
+
+## 大数问题
+JavaScript 能够表示的数值范围为2的1024次方到2的-1023次方（开区间），超出这个范围的数无法表示。
+最大可以表示的整数是 2^1024 - 1，从2^1024 开始就变成了 Infinity。
+
+正数范围内，如果一个数小于等于2的-1075次方（指数部分最小值-1023，再加上小数部分的52位），那么就会发生为“负向溢出”，即 JavaScript 无法表示这么小的数，这时会直接返回0。
+
+```javascript
+Math.pow(2, 1024)//Infinity
+Math.pow(2, -1075) // 0
+```
+
+
+
+
+## 浮点误差问题
+>如果一个浮点数本身就是一个整数（如1.0），那么这个数被转换为整数。所以这种情况的浮点数计算也是没有问题的。
+
+
+**造成浮点误差的本质原因是：浮点数十进制转换为二进制后成为一个无限循环小数，52位空间无法准确表示。**
+
+### 数据展示
+主要用到两个函数toPrecision()和toFixed()：
+
+共同点：
+- 把数字转成字符串
+- 同时通过参数控制精度：
+- 四舍五入。但注意是对二进制处理之后的数字进行四舍五入。
+比如`1.005.toFixed(2)`是1.00 而不是 1.01。原因： 1.005 实际对应的数字是 1.00499999999999989，在四舍五入时全部被舍去。
+
+不同点：
+- toPrecision 参数表示有效数个数
+- toFixed  参数表示小数点后数字的个数
+
+```javascript
+console.log(0.005.toPrecision(2));// 0.0050
+console.log(0.005.toFixed(2));//  0.01
+
+console.log(1.005.toPrecision(2));//  1.0
+console.log(1.005.toFixed(2));// 1.00
+
+console.log(Math.round(1.4));// 1 
+console.log(Math.floor(1.4));// 1 
+console.log(Math.ceil(1.4));// 2 
+```
+
+借助toPrecision()和toFixed()精准展示浮点数：
+```javascript
+function strip(num, precision = 12) {
+  return +parseFloat(num.toPrecision(precision));
+}
+```
+
+### 数据运算
+计算的时候，都是二进制之间进行运算，得到最后结果之后再转为十进制。
+
+**方法1**. 直接计算，之后再通过toPrecision()和toFixed()精准展示浮点数。
+
+```javascript
+parseFloat((数学表达式).toFixed(digits));
+```
+
+**方法2**. 把小数转成整数后再运算。
+
+加法
+```javascript
+function add(num1 , num2){
+	var len1 = num1.toString().split('.')[1].length(),
+	len2 = num2.toString().split('.')[1].length();
+	var x = Math.pow(10 , Math.max(len1,len2));
+	var cx = Math.pow(10 , Math.abs(len1,len2));
+	if (len1>len2){
+		var newNum1 = Number((num1.toString().replace('.' , '')) * cx;
+		var newNum2 = Number((num2.toString().replace('.' , ''));
+		}else if(len2>len1){
+		var newNum1 = Number((num1.toString().replace('.' , '')) ;
+		var newNum2 = Number((num2.toString().replace('.' , '')) * cx;
+		}else{
+		var newNum1 = Number((num1.toString().replace('.' , '')) ;
+		var newNum2 = Number((num2.toString().replace('.' , '')) ;
+		}
+	return  ((newNum1 + newNum2) / x).toFixed(Math.max(len1,len2));
+}
+```
+减法
+```javascript
+function sub(num1 , num2){
+	var len1 = num1.toString().split('.')[1].length(),
+	len2 = num2.toString().split('.')[1].length();
+	var x = Math.pow(10 , Math.max(len1,len2));
+	var cx = Math.pow(10 , Math.abs(len1,len2));
+	if (len1>len2){
+		var newNum1 = Number((num1.toString().replace('.' , '')) * cx;
+		var newNum2 = Number((num2.toString().replace('.' , ''));
+		}else if(len2>len1){
+		var newNum1 = Number((num1.toString().replace('.' , '')) ;
+		var newNum2 = Number((num2.toString().replace('.' , '')) * cx;
+		}else{
+		var newNum1 = Number((num1.toString().replace('.' , '')) ;
+		var newNum2 = Number((num2.toString().replace('.' , '')) ;
+		}
+	return  ((newNum1 - newNum2) / x).toFixed(Math.max(len1,len2));
+}
+```
+除法
+```javascript
+function sub(num1 , num2){
+	var len1 = num1.toString().split('.')[1].length(),
+	len2 = num2.toString().split('.')[1].length();
+	var cx = Math.pow(10 , Math.abs(len1,len2));
+	var newNum1 = Number((num1.toString().replace('.' , '')),
+	newNum2 = Number((num2.toString().replace('.' , ''));
+	if (len1>len2){
+	return  (newNum1*newNum2) / x;
+	}else if(len2>len1){
+	return  (newNum1*newNum2) *x;
+	}else{
+	return newNum1*newNum2;
+	}
+}
+```
+乘法
+```javascript
+function sub(num1 , num2){
+	var len1 = num1.toString().split('.')[1].length(),
+	len2 = num2.toString().split('.')[1].length();
+	var x = Math.pow(10 , len1+len2);
+	var newNum1 = Number((num1.toString().replace('.' , '')),
+	newNum2 = Number((num2.toString().replace('.' , ''));
+	return  (newNum1*newNum2) / x;
+}
+```
+
+## Reference 
+1. [Number.prototype.toFixed() - MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed)
+2. [Number.prototype.toPrecision() - MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/toPrecision)
+3. [数值 - JavaScript 教程 - 网道](https://wangdoc.com/javascript/types/number.html)
+4. [JavaScript 浮点数陷阱及解法](https://github.com/camsong/blog/issues/9)
+5. [JavaScript 浮点数运算的精度问题](http://www.css88.com/archives/7340)
+
+
