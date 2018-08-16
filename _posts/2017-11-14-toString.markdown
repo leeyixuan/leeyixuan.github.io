@@ -1,0 +1,139 @@
+---
+layout:     post
+title:      "valueOf() & toString() & String()"
+subtitle:   ""
+date:       2017-11-14
+author:     "leeyixuan"
+header-img: "img/background/post-bg-js.jpg"
+tags:
+    - js
+---
+>Object的每个实例都有三个方法：
+>- valueOf（）
+>- toString（）
+>- toLocaleString（）
+
+## valueOf()
+语法：`object.valueOf()`
+返回值：该对象的**原始值**。
+
+
+
+- 原生内置对象（Boolean\Number\String）会重写该方法。
+- Date会重写该方法。
+- RegExp返回正则表达式本身。
+- Object\Function\Array，返回对象本身。
+>大部分的内置引用类型的实例都是返回本身，所以该方法是为内置对象而设计的。
+
+
+>很少需要自己调用valueOf方法；对象在某些情况下需要使用**原始值**参加运算，JavaScript后台会自动调用。
+
+
+![][1]
+
+## toString()
+语法：`object.toString()`
+返回值：该对象的**字符串**。
+
+- 基本类型调用toString()：
+	- null和undefined被视为引用类型
+	
+	- number、string、boolean返回对应的字符串
+
+- 引用类型调用toString()：
+返回 `"[object type]"`（这也是字符串），其中type是对象的类型。 但是toString()通常会被覆盖。**使用该方法可以判断对象的类型，类似于instanceof。**
+ 
+ >由于实例对象可能会自定义toString方法，覆盖掉Object.prototype.toString方法，所以为了得到类型字符串，最好直接使用Object.prototype.toString方法。通过函数的call方法，可以在任意值上调用这个方法，帮助我们判断这个值的类型。
+ 
+ ```JavaScript
+Object.prototype.toString.call(new Date); // [object Date]
+Object.prototype.toString.call(new String); // [object String]
+Object.prototype.toString.call(Math); // [object Math]
+Object.prototype.toString.call(undefined); // [object Undefined]
+Object.prototype.toString.call(null); // [object Null]
+```
+
+### 重写覆盖
+Object的原生内置对象（Array\Date\String\Boolean\RegExp\Function）会重写覆盖该方法。
+- 对于Array对象，toString 方法返回一个字符串，该字符串由数组中的每个元素的 toString() 返回值经调用 join() 方法连接（由逗号隔开）组成。
+```javascript
+var monthNames = ['Jan', 'Feb', 'Mar', 'Apr'];
+var myVar = monthNames.toString(); // 输出 "Jan,Feb,Mar,Apr" to myVar.
+```
+- 对于  Date 对象，toString() 方法返回一个表示该对象的字符串。
+该 toString 方法总是返回一个美式英语日期格式的字符串。
+```javascript
+var x = new Date();
+myVar = x.toString(); // 把类似于下面格式的值赋给 myVar，
+// Mon Sep 28 1998 14:36:22 GMT-0700 (Pacific Daylight Time)
+```
+- 对于 String 对象，toString 方法返回该对象的字符串形式，和 String.prototype.valueOf() 方法返回值一样。
+```javascript
+var x = new String("Hello world");
+alert(x.toString())      // 输出 "Hello world"
+```
+- 对于Boolean对象，toString 方法返回该对象的字符串形式。
+```javascript
+var flag = new Boolean(true)
+var myVar = flag.toString()// 输出 "true"
+```
+- 对于RegExp对象，toString 方法返回该**正则表达式的字面量**。
+```javascript
+ var pattern=  new RegExp(".at","ig");
+ alert(pattern.toString());// /.at/ig
+```
+
+- 对于Function对象，toString 方法返回该该函数的代码。
+
+
+## String()
+String()方法的转化规则：
+- null，返回`"null"`。
+- undefined，返回`"undefined"`。
+- 其他，调用toString()方法。
+
+String()是转型函数，同时String()也是构造函数，`new String()`可以创建String的对象。
+
+**String()不是作为对象的方法存在的，所以是直接调用即可。**
+
+## String() vs. toString()
+1. toString()和String()的主要区别就在于String()还能转换null和undefined值。
+>从JavaScript1.8.5开始toString()调用 null返回"[object Null]"，undefined 返回"[object Undefined]"。
+
+
+2. toString()是对象的方法；String()是转型函数。
+
+```javascript
+var flag = new Boolean(true)
+var myVar = flag.toString()// 输出 "true"
+
+var myVar2 = String(flag)// 输出 "true"
+```
+
+## 基本包装类型——特殊的引用类型
+每一个基本类型（string\number\boolean）都有一个对应的基本包装类型。
+基本包装类型存在的意义：只有引用类型的实例具有方法，这样每一个基本类型也能有方法。（基本类型的值调用方法时，JavaScript后台**自动**将生成对应的基本类型的实例，随后销毁该实例）
+
+当然也可以强制生成一个基本类型的实例对象，使用`new`操作符，不过这样没有意义。
+
+```javascript
+var numberObject=new Number(10);
+var numberValue=10;
+
+alert(typeof numberObject); //"object"
+alert(typeof numberValue); //"number"
+alert(numberObject instanceof Number); //true
+alert(numberValue instanceof Number); //false
+```
+
+
+  
+## reference
+  1. [Object.prototype.valueOf() - MDN][3]
+  2. [Object.prototype.toString() - MDN][4]
+
+
+  [1]: https://www.github.com/CoolRabbit520/photos/raw/master/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1521450301658.jpg
+
+  [3]: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/valueOf
+  [4]: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/toString
