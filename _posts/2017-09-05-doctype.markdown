@@ -1,0 +1,114 @@
+---
+layout:     post
+title:      "严格模式 & 文档模式"
+subtitle:   ""
+date:       2017-11-14
+author:     "leeyixuan"
+header-img: "img/background/post-bg-js.jpg"
+tags:
+    - js
+---
+
+
+## 严格模式
+
+
+
+严格模式是ES5提出的一种运行模式，与浏览器的实现无关。这种模式使得Javascript在更严格的条件下运行。
+
+设立"严格模式"的目的，主要有以下几个：
+- 消除Javascript语法的一些不合理、不严谨之处，减少一些怪异行为;
+- 消除代码运行的一些不安全之处，保证代码运行的安全；
+- 提高编译器效率，增加运行速度；
+- 为未来新版本的Javascript做好铺垫。
+
+
+### 开启严格模式
+在脚本顶部（函数内部的上方）添加一条编译指令即可启用该模式：`"use strict";`
+
+### 严格模式带来的变化
+同样的代码，在"严格模式"中，可能会有不一样的运行结果；一些在"正常模式"下可以运行的语句，在"严格模式"下将不能运行。
+1. 全局变量显式声明
+在正常模式中，如果一个变量没有声明就赋值，默认是全局变量。严格模式下，变量都必须先用var命令声明，然后再使用。
+2. 创设eval作用域
+正常模式下，eval语句的作用域，取决于它处于全局作用域，还是处于函数作用域。严格模式下，eval语句本身就是一个作用域，不再能够生成全局变量了，它所生成的变量只能用于eval内部。
+3. 禁止使用with语句
+因为with语句无法在编译时就确定，属性到底归属哪个对象。
+4. 对象不能有重名的属性
+正常模式下，如果对象有多个重名属性，最后赋值的那个属性会覆盖前面的值。严格模式下，这属于语法错误。
+5. 函数不能有重名的参数
+正常模式下，如果函数有多个重名的参数，可以用arguments[i]读取。严格模式下，这属于语法错误。
+6. 不允许对arguments赋值；arguments不再追踪参数的变化；禁止使用arguments.callee
+
+
+## doctype 文档类型
+因为HTML4.01基于SGML，所以需要通过`<!DOCTYPE>`声明引用DTD，告知浏览器当前的**文档类型**， 于是浏览器便知道通过哪一种规范解析文档（比如HTML或XHTML规范）。**针对每种规范浏览器同样也会选择对应的文档模式。**
+>DTD规定了标记语言的规则，让浏览器的渲染去遵守这个规则才能正确地呈现内容。
+
+>!DOCTYPE声明必须是HTML文档第一行，位于 `<html>` 标签之前。
+>!DOCTYPE声明不属于HTML标签；它是一条指令，告诉浏览器编写页面所用的标记的版本。
+
+>SGML，标准通用标记语言，是现时常用的超文本格式的最高层次标准。HTML和XML派生于它。XML可以被认为是它的一个子集，XML的出现就是为了简化它以便用于更加通用的目的比如语义web，而HTML是它的一个应用。
+
+![](https://www.github.com/CoolRabbit520/photos/raw/master/小书匠/1534489731284.png)
+
+
+HTML5不基于SGML，因此不需要对DTD进行引用，但是需要 doctype 来规范浏览器的行为——文档模式。
+
+
+
+
+## 文档模式
+
+对于以Webkit、Molliza等作为内核的浏览器来说，**渲染树的布局、绘制和JS的执行等**主要与**内核版本**挂钩；
+而对于IE浏览器而言，这些从IE6开始就跟**文档模式**挂钩了。
+
+文档模式包括：
+- 标准模式：让IE浏览器的行为更接近与标准行为。
+- 兼容模式：让IE浏览器的行为更接近与IE5相同。主要影响css内容的呈现，在某些情况下也会JavaScript的解释执行。
+- 准标准模式：和标准模式相同。
+
+### 如何指定文档模式
+四种设置文档模式的方法：
+1. 开发者工具中的“文档模式”；
+2. 通过在head标签内加入如`<meta http-equiv="X-UA-Compatible" content="IE=7">`的元数据标签（该例子将文档模式设置为IE7标准模式）；
+3. 通过<!DOCTYPE>的增删，在标准模式和兼容模式间切换；
+4. 通过Web服务器配HTTP响应头，带上 `X-UA-Compatible: IE=edge`字段。
+
+具体地：
+ - 所有IE浏览器在默认情况下，`<meta http-equiv="X-UA-Compatible">`与`<!DOCTYPE>`均没有，是采用兼容模式；
+ - 当有`<!DOCTYPE>`时，均采用浏览器版本对应的标准模式（如IE8就采用IE8标准模式，IE11就采用IE11标准模式兼容)；
+- 当出现`<meta http-equiv="X-UA-Compatible">`时，
+content属性值范围，具体范围如下：
+`IE=5、IE=7、IE=EmulateIE7、IE=8、IE=EmulateIE8、IE=9、IE=10、 IE=11、 IE=Edge `
+	1. IE=5：表示采用怪异模式；
+	2. IE=7等纯数字的值：表示采用对应IE版本的标准模式，即使不是以`<!DOCTYPE>`作为文档第一行，文档模式依旧使用标准模式；
+	3. IE=EmulateIE7等含EmulateIE字符串的值：表示采用模拟对应IE版本的模式，就是以`<!DOCTYPE>`作为文档第一行则采用标准模式，否则采用怪异模式。
+	4. IE=Edge：表示采用浏览器自身版本的文档模式，如IE11，以`<!DOCTYPE html>`作为文档第一行则采用IE11标准模式，否则采用怪异模式。
+
+
+### IE 兼容模式带来的问题
+IE兼容模式开启的话， 相对于当前的界面会以IE5.5的方式进行渲染，如果IE浏览器以IE5.5的方式进行解析， 会导致以下问题;
+
+**影响css的情况**：
+
+- 盒模型是混杂模式和标准模式的主要区别
+<=IE6将盒子的padding和border算到盒子尺寸中，这被称为IE盒模型。
+W3C标准的盒模型中，box大小就是content大小。
+这一区别将导致页面绘制时所有块级元素都出现很大差别，所以两种不同的文档模式下的页面也区别很大。
+
+- 影响图片元素的垂直对齐方式，就是在行框对基线的选择，IE的怪异模式会以Bottom-line为基线，标准模式下以base-line为基线。
+
+- 影响table元素继承字体的某些属性，在IE5的怪异模式下不会继元素的一部分属性，尤其是font-size属性。
+
+- IE5怪异模式中，内联元素可以定义尺寸
+
+- IE标准模式下，overflow取值为visible即溢出可见，在怪异模式下该溢出会被当作扩展box来对待，元素的大小由其内容决定，溢出不会被裁剪，而是父元素会自动调整自己的宽高以完全适应包含内容。
+
+**影响javascript主要体现在“窗口大属性innerWidth，innerHeight，outerWidth，outerHeight”的区别。**
+
+## reference
+1. [Javascript 严格模式详解](http://www.ruanyifeng.com/blog/2013/01/javascript_strict_mode.html)
+2. [你知道什么是doctype，什么是文档模式吗 ](http://frontenddev.org/link/do-you-know-what-a-doctype-what-document-model-is.html)
+3. [JS魔法堂：浏览器模式和文档模式怎么玩？ ](https://www.cnblogs.com/fsjohnhuang/p/3817418.html)
+4. [浅谈HTML文档模式](https://www.cnblogs.com/venoral/p/5317824.html)

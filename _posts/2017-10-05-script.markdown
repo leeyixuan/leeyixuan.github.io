@@ -1,0 +1,66 @@
+---
+layout:     post
+title:      "async & defer"
+subtitle:   ""
+date:       2017-11-14
+author:     "leeyixuan"
+header-img: "img/background/post-bg-js.jpg"
+tags:
+    - js
+---
+               
+
+
+## script执行
+
+浏览器在执行HTML的时候如果遇到`<script>`时会停止页面的渲染，去下载和执行js的文件直接遇见`</scirpt>`会继续渲染页面。故浏览器在执行js文件的时候浏览器表现为一片空白，为了解决这个问题ECMAScript定义了defer和async两个属性用于控制JS的下载和执行。
+
+
+![][2]
+
+
+## async
+
+![][4]
+
+async会等待的资源不会阻塞其余资源的加载，不会影响页面的加载。但是有一点需要注意下，在有async的情况下，js一旦下载好了就会执行，所以很有可能不是按照原本的顺序来执行的。如果js前后有依赖性，用async，就很有可能出错。
+
+
+## defer
+
+![][3]
+
+对于defer，我们可以认为是将外链的js放在了页面底部。js的加载不会阻塞页面的渲染和资源的加载。defer会按照原本的js的顺序执行，所以如果前后有依赖关系的js可以放心使用。
+
+## 区别
+
+相同点：
+
+*   加载文件时不阻塞页面渲染
+*   对于inline的script无效
+*   使用这两个属性的脚本中不能调用document.write方法
+*   有脚本的onload的事件回调
+
+区别点：
+
+*   html4.0中定义了defer；html5.0中定义了async
+*   浏览器支持不同
+*   每一个async属性的脚本都在它下载结束之后立刻执行，同时会在window的load事件之前执行。所以就有可能出现脚本执行顺序被打乱的情况；每一个defer属性的脚本都是在页面解析完毕之后，按照原本的顺序执行，同时会在document的DOMContentLoaded之前执行。
+
+简单的来说，使用这两个属性会有三种可能的情况
+
+*   如果async为true，那么脚本在下载完成后异步执行。
+*   如果async为false，defer为true，那么脚本会在页面解析完毕之后执行。
+*   如果async和defer都为false，那么脚本会在页面解析中，停止页面解析，立刻下载并且执行
+
+无论使用defer还是async属性，都需要首先将页面中的js文件进行整理，哪些文件之间有依赖性，哪些文件可以延迟加载等等，做好js代码的合并和拆分，然后再根据页面需要使用这两个属性。
+
+## 总结
+async和defer属性其实也只是允许JS脚本并发下载，但是脚本执行仍然是阻塞的，前者是下载完毕立即执行，后者是在遇到`</html>`标签之后+DOMCotentLoaded事件之前执行。其实，这两个属性真正的作用是：defer延迟JS的执行，避免影响页面的构造；async不让页面等待脚本下载，从而可以一步加载页面其他内容。
+
+![][1]
+
+  [1]: https://www.github.com/CoolRabbit520/photos/raw/master/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1504611479994.jpg
+  [2]: https://www.github.com/CoolRabbit520/photos/raw/master/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1504611437382.jpg
+  [3]: https://www.github.com/CoolRabbit520/photos/raw/master/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1504611422787.jpg
+  [4]: https://www.github.com/CoolRabbit520/photos/raw/master/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1504611452762.jpg

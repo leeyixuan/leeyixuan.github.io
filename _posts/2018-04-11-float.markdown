@@ -44,7 +44,7 @@ step4. 有效数字舍去首位的1，M=10011001...
 
 ## 精度问题
 
-精度最多只能到53（加上被省略的1位整数）个二进制位。这意味着，绝对值小于等于2的53次方的整数，即-2^53 到2^53，都可以精确表示。
+精度最多只能到53（加上被省略的1位整数）个二进制位。这意味着，绝对值小于等于2的53次方的整数，即-2^53 到2^53，都可以精确表示。(此处其实表述地不准确，其实应该是：在十进制下，可以准确的表示15位有效数字。)
 
 >由于2的53次方是一个16位的十进制数值，所以简单的法则就是，JavaScript 对15位的十进制数都可以精确处理。
 
@@ -122,7 +122,7 @@ function add(num1 , num2){
 	var len1 = num1.toString().split('.')[1].length(),
 	len2 = num2.toString().split('.')[1].length();
 	var x = Math.pow(10 , Math.max(len1,len2));
-	var cx = Math.pow(10 , Math.abs(len1,len2));
+	var cx = Math.pow(10 , Math.abs(len1 - len2));
 	if (len1>len2){
 		var newNum1 = Number((num1.toString().replace('.' , '')) * cx;
 		var newNum2 = Number((num2.toString().replace('.' , ''));
@@ -142,7 +142,7 @@ function sub(num1 , num2){
 	var len1 = num1.toString().split('.')[1].length(),
 	len2 = num2.toString().split('.')[1].length();
 	var x = Math.pow(10 , Math.max(len1,len2));
-	var cx = Math.pow(10 , Math.abs(len1,len2));
+	var cx = Math.pow(10 , Math.abs(len1 - len2));
 	if (len1>len2){
 		var newNum1 = Number((num1.toString().replace('.' , '')) * cx;
 		var newNum2 = Number((num2.toString().replace('.' , ''));
@@ -161,7 +161,7 @@ function sub(num1 , num2){
 function sub(num1 , num2){
 	var len1 = num1.toString().split('.')[1].length(),
 	len2 = num2.toString().split('.')[1].length();
-	var cx = Math.pow(10 , Math.abs(len1,len2));
+	var cx = Math.pow(10 , Math.abs(len1 - len2));
 	var newNum1 = Number((num1.toString().replace('.' , '')),
 	newNum2 = Number((num2.toString().replace('.' , ''));
 	if (len1>len2){
