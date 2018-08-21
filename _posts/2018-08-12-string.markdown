@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "javascript中的字符处理"
+title:      "JS中的字符处理"
 subtitle:   ""
 date:       2018-8-12
 author:     "leeyixuan"

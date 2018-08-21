@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "浮点数误差处理"
+title:      "JS中的浮点数误差"
 subtitle:   ""
 date:       2018-4-11
 author:     "leeyixuan"
