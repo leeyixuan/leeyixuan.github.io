@@ -1,7 +1,6 @@
 ---
 layout:     post
 title:      "JS中的垃圾收集和内存管理"
-subtitle:   ""
 date:       2018-6-11
 author:     "leeyixuan"
 header-img: "img/background/post-bg-js.jpg"

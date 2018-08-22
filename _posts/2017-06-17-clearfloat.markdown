@@ -1,7 +1,6 @@
 ---
 layout:     post
 title:      "清除浮动的七种方法"
-subtitle:   ""
 date:       2017-6-17
 author:     "leeyixuan"
 header-img: "img/background/post-bg-clearfloat.jpg"

@@ -1,7 +1,6 @@
 ---
 layout:     post
 title:      "HTTP"
-subtitle:   ""
 date:       2018-5-14
 author:     "leeyixuan"
 header-img: "img/background/post-bg-flex.jpg"

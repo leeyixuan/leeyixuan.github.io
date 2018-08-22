@@ -1,7 +1,6 @@
 ---
 layout:     post
 title:      "viewport"
-subtitle:   ""
 date:       2018-7-11
 author:     "leeyixuan"
 header-img: "img/background/post-bg-git.jpg"

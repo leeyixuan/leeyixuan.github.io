@@ -1,7 +1,6 @@
 ---
 layout:     post
 title:      "严格模式 & 文档模式"
-subtitle:   ""
 date:       2017-11-14
 author:     "leeyixuan"
 header-img: "img/background/post-bg-js.jpg"

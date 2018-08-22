@@ -1,7 +1,6 @@
 ---
 layout:     post
 title:      "重绘和回流"
-subtitle:   ""
 date:       2017-11-28
 author:     "leeyixuan"
 header-img: "img/background/post-bg-layout.jpg"

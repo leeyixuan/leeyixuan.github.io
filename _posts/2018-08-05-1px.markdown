@@ -1,7 +1,6 @@
 ---
 layout:     post
 title:      "1px边框问题"
-subtitle:   ""
 date:       2018-8-5
 author:     "leeyixuan"
 header-img: "img/background/post-bg-git.jpg"

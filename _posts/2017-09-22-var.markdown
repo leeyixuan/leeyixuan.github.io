@@ -1,7 +1,6 @@
 ---
 layout:     post
 title:      "变量的声明方式对变量类型的影响"
-subtitle:   ""
 date:       2017-9-22
 author:     "leeyixuan"
 header-img: "img/background/post-bg-js.jpg"

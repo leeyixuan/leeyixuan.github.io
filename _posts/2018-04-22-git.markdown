@@ -1,7 +1,7 @@
 ---
 layout:     post
-title:      "git常用操作指南——关于git的十个问题"
-subtitle:   ""
+title:      "git常用操作指南"
+subtitle:   "关于git的十个问题"
 date:       2018-4-22
 author:     "leeyixuan"
 header-img: "img/background/post-bg-git.jpg"

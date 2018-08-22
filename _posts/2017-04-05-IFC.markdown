@@ -1,7 +1,6 @@
 ---
 layout:     post
 title:      "浅析IFC"
-subtitle:   ""
 date:       2017-4-5
 author:     "leeyixuan"
 header-img: "img/background/post-bg-IFC.jpg"

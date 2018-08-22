@@ -1,7 +1,6 @@
 ---
 layout:     post
 title:      "TCP"
-subtitle:   ""
 date:       2018-5-12
 author:     "leeyixuan"
 header-img: "img/background/post-bg-flex.jpg"

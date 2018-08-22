@@ -1,7 +1,6 @@
 ---
 layout:     post
 title:      "用户输入URL之后发生什么"
-subtitle:   ""
 date:       2018-7-1
 author:     "leeyixuan"
 header-img: "img/background/post-bg-js.jpg"

@@ -1,7 +1,6 @@
 ---
 layout:     post
 title:      "深入学习flex布局"
-subtitle:   ""
 date:       2018-5-03
 author:     "leeyixuan"
 header-img: "img/background/post-bg-scroll.jpg"
