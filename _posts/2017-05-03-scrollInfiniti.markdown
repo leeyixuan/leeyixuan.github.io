@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      "实现滚动无限加载效果"
-subtitle:   "sroll爬坑之旅"
+subtitle:   ""
 date:       2017-5-3
 author:     "leeyixuan"
 header-img: "img/background/post-bg-git.jpg"

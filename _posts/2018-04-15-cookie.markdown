@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      "cookie"
-subtitle:   "磨人的小甜饼"
+subtitle:   ""
 date:       2018-4-15
 author:     "leeyixuan"
 header-img: "img/background/post-bg-cookie.jpg"

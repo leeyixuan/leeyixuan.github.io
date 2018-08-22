@@ -60,7 +60,6 @@ String.fromCharCode()方法可以达到和`\uxxxx`一样的目的，即可以通
 ES5还提供一个可以根据字符获取码点的函数，String.fromCharCode()的逆方法——String.prototype.charCodeAt() 
 - 参数：字符串指定位置的索引
 - 返回：对应字符的Unicode 码点（十进制表示）
-`'abc'.charCodeAt(1); // 98`
 - 注意：返回的 Unicode 码点不会大于65536（0xFFFF），也就是说，只返回两个字节的字符的码点。如果遇到码点大于 65536 的字符（四个字节的字符），必需连续使用两次charCodeAt。
 ```javascript
 '💩'.charCodeAt(0); //55357  

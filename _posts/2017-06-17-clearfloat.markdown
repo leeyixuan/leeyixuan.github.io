@@ -1,8 +1,8 @@
 ---
 layout:     post
-title:      "关于清除浮动那些事"
-subtitle:   "七种方法的分析比较"
-date:       2017-9-11
+title:      "清除浮动的七种方法"
+subtitle:   ""
+date:       2017-6-17
 author:     "leeyixuan"
 header-img: "img/background/post-bg-clearfloat.jpg"
 tags:

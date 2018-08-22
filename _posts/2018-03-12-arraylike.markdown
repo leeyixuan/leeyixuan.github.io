@@ -64,14 +64,12 @@ HTMLCollection还有一个nameItem()方法，可以返回集合中name属性和i
 
 ```javascript
 var arrayLike = {0: 'name', 1: 'age', 2: 'sex', length: 3 }
-// 1. slice
-Array.prototype.slice.call(arrayLike); // ["name", "age", "sex"] 
-// 2. splice
-Array.prototype.splice.call(arrayLike, 0); // ["name", "age", "sex"] 
+// 1. 借用String.prototype.slice方法
+Array.prototype.slice.call(arrayLike); // ["name", "age", "sex"]
+// 2. 借用String.prototype.apply方法
+Array.prototype.concat.apply([], arrayLike) 
 // 3. ES6 Array.from
 Array.from(arrayLike); // ["name", "age", "sex"] 
-// 4. apply
-Array.prototype.concat.apply([], arrayLike)
 ```
 
 ## 类数组直接借用数组的方法
